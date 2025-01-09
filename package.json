@@ -1,0 +1,28 @@
+{
+  "name": "linq-typescript",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "rm:modules": "npx rimraf node_modules",
+    "dev": "npx nodemon",
+    "build": "npx tsc",
+    "clear": "npx rimraf dist"
+  },
+  "keywords": [
+    "LINQ",
+    "linq",
+    "JavaScript",
+    "TypeScript",
+    "Linq-JS"
+  ],
+  "author": "Ivan Kazakov <ivankazakov3344@gmail.com>",
+  "license": "MIT",
+  "description": "Linq module fully written for use in JavaScript and TypeScript",
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "nodemon": "^3.1.9",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
