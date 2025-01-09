@@ -1,4 +1,4 @@
-import { TEnumerable } from "./types/IEnumerable.js";
+import { SelectorFn, TEnumerable } from "./types/IEnumerable.js";
 
 export class IEnumerable<T> implements TEnumerable<T> {
   constructor(iterator: Iterable<T>) {
@@ -55,6 +55,24 @@ export class IEnumerable<T> implements TEnumerable<T> {
     }
 
     return new IEnumerable<TResult>(generator());
+  }
+
+  public Unique<K = T>(selector?: SelectorFn<T, K>): IEnumerable<T> {
+    const source = this.getGenerator();
+    const set = new Set()
+    const select = selector || ((item: T) => item as unknown as K);
+
+    function* generator(): Generator<T> {
+      for (const value of source) {
+        const key = select(value);
+        if (!set.has(key)) {
+          set.add(key);
+          yield value;
+        }
+      }
+    }
+
+    return new IEnumerable<T>(generator());
   }
 
   public ToArray(): T[] {
