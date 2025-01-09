@@ -2,6 +2,7 @@
   "name": "linq-typescript",
   "version": "1.0.0",
   "type": "module",
+  "main": "dist/main.js",
   "scripts": {
     "rm:modules": "npx rimraf node_modules",
     "dev": "npx nodemon",

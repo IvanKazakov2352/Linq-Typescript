@@ -1,2 +1,5 @@
-const message: string = "sdfgsdfg23452345"
-console.log(message)
+import { IEnumerable } from "./IEnumerable.js";
+
+export default {
+  IEnumerable
+}
