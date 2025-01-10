@@ -1,5 +1,5 @@
-import { IEnumerable } from "./IEnumerable.js";
+import { Enumerable } from "./Enumerable/Enumerable.js";
 
 export default {
-  IEnumerable
+  Enumerable
 }

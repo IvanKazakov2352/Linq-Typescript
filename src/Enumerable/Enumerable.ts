@@ -1,6 +1,7 @@
-import { SelectorFn, TEnumerable } from "./types/IEnumerable.js";
+import { IEnumerable } from "../types/IEnumerable.js";
+import { SelectorFn } from "../types/Selector.js";
 
-export class IEnumerable<T> implements TEnumerable<T> {
+export class Enumerable<T> implements IEnumerable<T> {
   constructor(iterator: Iterable<T>) {
     this.iterator = iterator;
   }
@@ -29,7 +30,7 @@ export class IEnumerable<T> implements TEnumerable<T> {
     }
   }
 
-  public Where(callback: (value: T, index: number) => boolean): IEnumerable<T> {
+  public Where(callback: (value: T, index: number) => boolean): Enumerable<T> {
     const source = this.getGenerator();
 
     function* generator(): Generator<T> {
@@ -41,10 +42,10 @@ export class IEnumerable<T> implements TEnumerable<T> {
       }
     }
 
-    return new IEnumerable<T>(generator());
+    return new Enumerable<T>(generator());
   }
 
-  public Map<TResult>(callback: (value: T, index: number) => TResult): IEnumerable<TResult> {
+  public Map<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
     const source = this.iterator;
 
     function* generator(): Generator<TResult> {
@@ -54,10 +55,10 @@ export class IEnumerable<T> implements TEnumerable<T> {
       }
     }
 
-    return new IEnumerable<TResult>(generator());
+    return new Enumerable<TResult>(generator());
   }
 
-  public Unique<K = T>(selector?: SelectorFn<T, K>): IEnumerable<T> {
+  public Unique<K = T>(selector?: SelectorFn<T, K>): Enumerable<T> {
     const source = this.getGenerator();
     const set = new Set()
     const select = selector || ((item: T) => item as unknown as K);
@@ -72,7 +73,21 @@ export class IEnumerable<T> implements TEnumerable<T> {
       }
     }
 
-    return new IEnumerable<T>(generator());
+    return new Enumerable<T>(generator());
+  }
+
+  public static Range(start: number, count: number): Enumerable<number> {
+    if(Math.sign(start) === -1 || count < 0) {
+      throw new Error('The value of the start number must not be negative')
+    }
+
+    function* generator(): Generator<number> {
+      for(let i = 0; i < count; i++) {
+        yield start + i;
+      }
+    }
+
+    return new Enumerable<number>(generator());
   }
 
   public ToArray(): T[] {

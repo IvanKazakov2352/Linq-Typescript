@@ -1,0 +1,1 @@
+export type SelectorFn<T, K> = (item: T) => K;
