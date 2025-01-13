@@ -9,7 +9,7 @@ export class Enumerable<T> implements IEnumerable<T> {
   private iterator: Iterable<T>;
   private isDisposed: boolean = false;
 
-  [Symbol.iterator](): Iterator<T> {
+  public [Symbol.iterator](): Iterator<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object.");
     }
@@ -45,8 +45,8 @@ export class Enumerable<T> implements IEnumerable<T> {
     return new Enumerable<T>(generator());
   }
 
-  public Map<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
-    const source = this.iterator;
+  public Select<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
+    const source = this.getGenerator();
 
     function* generator(): Generator<TResult> {
       let index = 0;
@@ -88,6 +88,21 @@ export class Enumerable<T> implements IEnumerable<T> {
     }
 
     return new Enumerable<number>(generator());
+  }
+
+  public Aggregate<TAccumulate>(
+    seed: TAccumulate, 
+    callback: (acc: TAccumulate, current: T, index: number) => TAccumulate
+  ) {
+    const source = this.getGenerator();
+    let accumulator = seed
+
+    let index = 0;
+    for (const item of source) {
+      accumulator = callback(accumulator, item, index++)
+    }
+
+    return accumulator
   }
 
   public ToArray(): T[] {
