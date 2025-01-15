@@ -1,4 +1,4 @@
-import { Enumerable } from "../src/enumerable/Enumerable"
+import { Enumerable } from "../src/Enumerable"
 
 describe('Creating an Enumerable instance', () => {
   it('Creating an Enumerable instance with an array of numbers', () => {

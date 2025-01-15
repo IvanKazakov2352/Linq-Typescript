@@ -1,4 +1,4 @@
-import { Enumerable } from "../enumerable/Enumerable"
+import { Enumerable } from "../Enumerable"
 
 export type SelectorFn<T, K> = (item: T) => K;
 

@@ -1,5 +1,5 @@
-import { IEnumerable, SelectorFn } from "../types/IEnumerable";
-import { isIterable } from "../utils/utils";
+import { IEnumerable, SelectorFn } from "./types/types";
+import { isIterable } from "./utils/utils";
 
 export class Enumerable<T> implements IEnumerable<T> {
   constructor(iterator: Iterable<T>) {

@@ -1,4 +1,4 @@
-import { Enumerable } from "../src/enumerable/Enumerable";
+import { Enumerable } from "./Enumerable";
 
 export {
   Enumerable
