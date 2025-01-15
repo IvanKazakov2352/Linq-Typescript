@@ -1,4 +1,4 @@
-import { Enumerable } from "../src/Enumerable"
+import { Enumerable } from "../src/enumerable"
 
 describe('Testing the Where method', () => {
   it('Filtering of odd numbers', () => {
@@ -38,5 +38,16 @@ describe('Testing the Where method', () => {
     expect(query).not.toBe([])
     expect(query).toHaveLength(7)
     expect(query).toEqual(['D','D','D','D','D','D','D'])
+  })
+  it('Filtering an array with users', () => {
+    const users = [{ name: 'Ivan', age: 18 }, { name: 'Liza', age: 13 }, { name: 'Max', age: 17 }]
+
+    const query = new Enumerable(users)
+      .Where((user) => user.name === "Ivan" || user.age === 17)
+      .ToArray()
+
+    expect(query).not.toBe([])
+    expect(query).toHaveLength(2)
+    expect(query).toEqual([{ name: 'Ivan', age: 18 }, { name: 'Max', age: 17 }])
   })
 })

@@ -12,6 +12,10 @@ export class Enumerable<T> implements IEnumerable<T> {
   private iterator: Iterable<T>;
   private isDisposed: boolean = false;
 
+  public get isDisposed$(): boolean {
+    return this.isDisposed
+  }
+
   public [Symbol.iterator](): Iterator<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object.");
@@ -21,7 +25,9 @@ export class Enumerable<T> implements IEnumerable<T> {
   }
 
   public Dispose(): void {
-    if(this.isDisposed) return
+    if(this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object.");
+    }
 
     this.iterator = [] as Iterable<T>;
     this.isDisposed = true;

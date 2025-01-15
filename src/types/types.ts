@@ -1,4 +1,4 @@
-import { Enumerable } from "../Enumerable"
+import { Enumerable } from "../enumerable"
 
 export type SelectorFn<T, K> = (item: T) => K;
 
@@ -8,4 +8,5 @@ export interface IEnumerable<T> {
   Dispose: () => void;
   Unique: <K = T>(selector?: SelectorFn<T, K>) => Enumerable<T>;
   Aggregate: <TAccumulate>(seed: TAccumulate, callback: (acc: TAccumulate, current: T, index: number) => TAccumulate) => TAccumulate;
+  isDisposed$: boolean;
 }
