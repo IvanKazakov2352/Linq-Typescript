@@ -9,7 +9,7 @@
   "scripts": {
     "rm:modules": "npx rimraf node_modules",
     "dev": "npx nodemon",
-    "build": "npx tsc",
+    "build": "npx rimraf dist && npx tsc",
     "clear": "npx rimraf dist",
     "test": "jest"
   },

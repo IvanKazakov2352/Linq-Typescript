@@ -1,5 +1,5 @@
-import { Enumerable } from "./Enumerable/Enumerable.js";
+import { Enumerable } from "../src/enumerable/Enumerable";
 
-export default {
+export {
   Enumerable
 }

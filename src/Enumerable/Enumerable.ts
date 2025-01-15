@@ -1,8 +1,11 @@
-import { IEnumerable } from "../types/IEnumerable.js";
-import { SelectorFn } from "../types/Selector.js";
+import { IEnumerable, SelectorFn } from "../types/IEnumerable";
+import { isIterable } from "../utils/utils";
 
 export class Enumerable<T> implements IEnumerable<T> {
   constructor(iterator: Iterable<T>) {
+    if(iterator === undefined || !isIterable<T>(iterator)) {
+      throw new Error('The iterator object cannot be empty')
+    }
     this.iterator = iterator;
   }
 
