@@ -1,7 +1,7 @@
 # Linq module
 Linq module fully written for use in JavaScript and TypeScript
 
-install application dependencies
+# Install application dependencies
 ```bash
 npm install
 ```
@@ -10,11 +10,20 @@ or
 pnpm install
 ```
 
-build application
+# Building an application
 ```bash
 npm run build
 ```
 or
 ```bash
 pnpm build
+```
+
+# Run application tests
+```bash
+npm run test
+```
+or
+```bash
+pnpm test
 ```
