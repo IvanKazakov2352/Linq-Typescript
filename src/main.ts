@@ -1,5 +1,1 @@
-import { Enumerable } from "./enumerable";
-
-export {
-  Enumerable
-}
+export * from './enumerable'
