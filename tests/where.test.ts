@@ -48,6 +48,6 @@ describe('Testing the Where method', () => {
 
     expect(query).not.toBe([])
     expect(query).toHaveLength(2)
-    expect(query).toEqual([{ name: 'Ivan', age: 18 }, { name: 'Max', age: 17 }])
+    expect(query).toEqual([users[0], users[2]])
   })
 })

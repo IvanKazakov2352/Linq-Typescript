@@ -1,1 +1,1 @@
-export * from './enumerable'
+export { Enumerable } from './enumerable'

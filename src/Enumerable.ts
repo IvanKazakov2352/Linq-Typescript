@@ -54,7 +54,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return new Enumerable<T>(generator());
   }
 
-  public Select<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
+  public Map<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
     const source = this.getGenerator();
 
     function* generator(): Generator<TResult> {
