@@ -1,4 +1,4 @@
-import { Enumerable } from "../src/enumerable"
+import { Enumerable } from "../src/enumerable/enumerable"
 
 describe("Testing the Dispose function", () => {
   it("Testing the Dispose function", () => {
@@ -7,13 +7,13 @@ describe("Testing the Dispose function", () => {
     expect(enumerable.ToArray()).not.toBe([])
     expect(enumerable.ToArray()).toHaveLength(5)
     expect(enumerable.ToArray()).toEqual([1, 2, 3, 4, 5])
-    expect(enumerable.isDisposed$).toBe(false)
+    expect(enumerable.IsDisposed$).toBe(false)
 
     enumerable.Dispose()
 
     expect(enumerable.ToArray()).toHaveLength(0)
     expect(enumerable.ToArray()).toEqual([])
-    expect(enumerable.isDisposed$).toBe(true)
+    expect(enumerable.IsDisposed$).toBe(true)
 
     try {
       enumerable.Where(num => num === 1)

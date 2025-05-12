@@ -1,4 +1,5 @@
-import { Enumerable } from "../src/enumerable"
+import { Enumerable } from "../src/enumerable/enumerable"
+import { INT32_MAX, INT32_MIN } from "../src/utils/constants"
 
 describe("Testing the Range function", () => {
   it("Testing the Range function", () => {
@@ -9,11 +10,11 @@ describe("Testing the Range function", () => {
     expect(range).toEqual([5, 6, 7, 8, 9])
   })
   it("Testing invalid arguments in Range method", () => {
-    const errorText: string = "The value of the start number must not be negative"
-
-    expect(() => Enumerable.Range(1, -1)).toThrow(errorText)
-    expect(() => Enumerable.Range(-1, 0)).toThrow(errorText)
-    expect(() => Enumerable.Range(-1, -2)).toThrow(errorText)
+    expect(() => Enumerable.Range(1, -1)).toThrow(`Count must be non-negative. Received ${-1}.`)
+    expect(() => Enumerable.Range(([1, 2, 3]) as any, ('string') as any)).toThrow(`Arguments must be safe integers.`)
+    expect(() => Enumerable.Range(INT32_MIN - 500, 1)).toThrow(`Start must be between ${INT32_MIN} and ${INT32_MAX}.`)
+    expect(() => Enumerable.Range(INT32_MAX + 500, 1)).toThrow(`Start must be between ${INT32_MIN} and ${INT32_MAX}.`)
+    expect(() => Enumerable.Range(22, INT32_MAX + 500)).toThrow(`Count must be at most ${INT32_MAX}.`)
   })
   it("Generation of numeric range from 0 to 1_000_000", () => {
     const million: number = 1_000_000

@@ -1,4 +1,4 @@
-import { Enumerable } from "../src/enumerable"
+import { Enumerable } from "../src/enumerable/enumerable"
 
 describe("Testing the Map function", () => {
   it("Testing the Map function with a numeric array", () => {

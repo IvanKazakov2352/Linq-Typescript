@@ -1,5 +1,7 @@
-import { IEnumerable } from "./types/types";
-import { isIterable } from "./utils/utils";
+import { Dictionary } from "../dictionary/dictionary";
+import { IEnumerable, TObjectKey } from "../types/types";
+import { INT32_MAX, INT32_MIN } from "../utils/constants";
+import { isIterable } from "../utils/utils";
 
 export class Enumerable<T> implements IEnumerable<T> {
   constructor(iterator: Iterable<T>) {
@@ -12,7 +14,7 @@ export class Enumerable<T> implements IEnumerable<T> {
   private iterator: Iterable<T>;
   private isDisposed: boolean = false;
 
-  public get isDisposed$(): boolean {
+  public get IsDisposed$(): boolean {
     return this.isDisposed;
   };
 
@@ -68,15 +70,39 @@ export class Enumerable<T> implements IEnumerable<T> {
   };
 
   public static Range(start: number, count: number): Enumerable<number> {
-    if(Math.sign(start) === -1 || count < 0) {
-      throw new Error('The value of the start number must not be negative');
-    };
+    if (!Number.isSafeInteger(start) || !Number.isSafeInteger(count)) {
+      throw new RangeError(`Arguments must be safe integers.`);
+    }
+
+    if (count < 0) {
+      throw new RangeError(`Count must be non-negative. Received ${count}.`);
+    }
+
+    if (start < INT32_MIN || start > INT32_MAX) {
+      throw new RangeError(`Start must be between ${INT32_MIN} and ${INT32_MAX}.`);
+    }
+
+    if (count > INT32_MAX) {
+      throw new RangeError(`Count must be at most ${INT32_MAX}.`);
+    }
+
+    if (count > 0) {
+      const last = start + (count - 1);
+
+      if (last > INT32_MAX) {
+        throw new RangeError(`The range exceeds Int32.MaxValue. start + count - 1 = ${last}.`);
+      }
+      
+      if (last < INT32_MIN) {
+        throw new RangeError(`The range goes below Int32.MinValue. start + count - 1 = ${last}.`);
+      }
+    }
 
     function* generator(): Generator<number> {
-      for(let i = 0; i < count; i++) {
+      for (let i = 0; i < count; i++) {
         yield start + i;
-      };
-    };
+      }
+    }
 
     return new Enumerable<number>(generator());
   };
@@ -98,5 +124,10 @@ export class Enumerable<T> implements IEnumerable<T> {
 
   public ToArray(): T[] {
     return Array.from(this.iterator);
+  };
+
+  public ToDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T> {
+    const source = this.getGenerator();
+    return new Dictionary(source, keySelector);
   };
 }

@@ -1,4 +1,4 @@
-import { Enumerable } from "../src/enumerable"
+import { Enumerable } from "../src/enumerable/enumerable"
 
 describe("Testing the toArray function", () => {
   it("Testing the toArray function", () => {

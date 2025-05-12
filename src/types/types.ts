@@ -1,7 +1,10 @@
-import { Enumerable } from "../enumerable"
+import { Dictionary } from "../dictionary/dictionary";
+import { Enumerable } from "../enumerable/enumerable"
+
+export type TObjectKey = string | symbol
 
 export interface IEnumerable<T> {
-  isDisposed$: boolean;
+  IsDisposed$: boolean;
   Where: (callback: (value: T, index: number) => boolean) => Enumerable<T>;
   Map: <TResult>(callback: (value: T, index: number) => TResult) => Enumerable<TResult>;
   Dispose: () => void;
@@ -9,4 +12,10 @@ export interface IEnumerable<T> {
     seed: TAccumulate, 
     callback: (acc: TAccumulate, current: T, index: number) => TAccumulate
   ) => TAccumulate;
+  ToDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T>;
+}
+
+export interface IDictionary<T> {
+  GetDictionary(): Record<TObjectKey, T>;
+  ContainsKey(key: TObjectKey): boolean;
 }
