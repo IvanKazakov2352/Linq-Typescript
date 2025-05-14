@@ -14,7 +14,7 @@ export class Enumerable<T> implements IEnumerable<T> {
   private iterator: Iterable<T>;
   private isDisposed: boolean = false;
 
-  public get IsDisposed$(): boolean {
+  public get isDisposed$(): boolean {
     return this.isDisposed;
   };
 
@@ -26,7 +26,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return this.iterator[Symbol.iterator]();
   };
 
-  public Dispose(): void {
+  public dispose(): void {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object.");
     };
@@ -41,7 +41,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     };
   };
 
-  public Where(callback: (value: T, index: number) => boolean): Enumerable<T> {
+  public where(callback: (value: T, index: number) => boolean): Enumerable<T> {
     const source = this.getGenerator();
 
     function* generator(): Generator<T> {
@@ -56,7 +56,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return new Enumerable<T>(generator());
   };
 
-  public Map<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
+  public map<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
     const source = this.getGenerator();
 
     function* generator(): Generator<TResult> {
@@ -69,7 +69,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return new Enumerable<TResult>(generator());
   };
 
-  public static Range(start: number, count: number): Enumerable<number> {
+  public static range(start: number, count: number): Enumerable<number> {
     if (!Number.isSafeInteger(start) || !Number.isSafeInteger(count)) {
       throw new RangeError(`Arguments must be safe integers.`);
     }
@@ -107,7 +107,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return new Enumerable<number>(generator());
   };
 
-  public Aggregate<TAccumulate>(
+  public aggregate<TAccumulate>(
     seed: TAccumulate, 
     callback: (acc: TAccumulate, current: T, index: number) => TAccumulate
   ): TAccumulate {
@@ -122,11 +122,11 @@ export class Enumerable<T> implements IEnumerable<T> {
     return accumulator;
   };
 
-  public ToArray(): T[] {
+  public toArray(): T[] {
     return Array.from(this.iterator);
   };
 
-  public ToDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T> {
+  public toDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T> {
     const source = this.getGenerator();
     return new Dictionary(source, keySelector);
   };

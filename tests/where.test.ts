@@ -1,18 +1,18 @@
 import { Enumerable } from "../src/enumerable/enumerable"
 
-describe('Testing the Where method', () => {
+describe('Testing the where method', () => {
   it('Filtering of odd numbers', () => {
-    const query = new Enumerable(Enumerable.Range(0, 20))
-      .Where(num => num % 2 === 0)
-      .ToArray()
+    const query = new Enumerable(Enumerable.range(0, 20))
+      .where(num => num % 2 === 0)
+      .toArray()
       
     expect(query).toHaveLength(10)
     expect(query).not.toBe([])
   })
   it('Filtering two numbers 10 and 20', () => {
-    const query = new Enumerable(Enumerable.Range(0, 20))
-      .Where(num => num !== 10 && num !== 20)
-      .ToArray()
+    const query = new Enumerable(Enumerable.range(0, 20))
+      .where(num => num !== 10 && num !== 20)
+      .toArray()
 
     expect(query).toHaveLength(19)
     expect(query).not.toBe([])
@@ -22,8 +22,8 @@ describe('Testing the Where method', () => {
     const enumerable = new Enumerable(statuses)
 
     const query = enumerable
-      .Where(([key, value]) => key === 1 || key === 3 && value === 'Pending')
-      .ToArray()
+      .where(([key, value]) => key === 1 || key === 3 && value === 'Pending')
+      .toArray()
 
     expect(query).not.toBe([])
     expect(query).toHaveLength(2)
@@ -32,8 +32,8 @@ describe('Testing the Where method', () => {
   it('Filtering letters D in a string', () => {
     const str: string = "DrDrDfDgDhDjDk"
     const query = new Enumerable(str)
-      .Where((s) => s === "D")
-      .ToArray()
+      .where((s) => s === "D")
+      .toArray()
     
     expect(query).not.toBe([])
     expect(query).toHaveLength(7)
@@ -43,8 +43,8 @@ describe('Testing the Where method', () => {
     const users = [{ name: 'Ivan', age: 18 }, { name: 'Liza', age: 13 }, { name: 'Max', age: 17 }]
 
     const query = new Enumerable(users)
-      .Where((user) => user.name === "Ivan" || user.age === 17)
-      .ToArray()
+      .where((user) => user.name === "Ivan" || user.age === 17)
+      .toArray()
 
     expect(query).not.toBe([])
     expect(query).toHaveLength(2)

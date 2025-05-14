@@ -15,15 +15,34 @@ export class Dictionary<T> implements IDictionary<T> {
     }
   }
 
-  public GetDictionary(): Record<TObjectKey, T> {
+  private getGenerator() {
+    const dict = this.getDictionary()
+    
+    function* source() {
+      for (let key of Object.keys(dict)) {
+        yield [key, dict[key]];
+      }
+    }
+
+    return source()
+  }
+
+  public getDictionary(): Record<TObjectKey, T> {
     return this.dictionary;
   }
 
-  public ContainsKey(key: TObjectKey): boolean {
+  public containsKey(key: TObjectKey): boolean {
     if(key === null || key === undefined) {
       throw new Error('Dictionary search key not specified')
     }
-    const dictionary = this.GetDictionary()
-    return dictionary[key] ? true : false;
+    const dictionary = this.getDictionary()
+    return Object.prototype.hasOwnProperty.call(dictionary, key);
+  }
+
+  public clear() {
+    this.dictionary = {}
+    this.index = 0
+    const source = this.getGenerator()
+    return new Dictionary(source)
   }
 }

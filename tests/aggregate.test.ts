@@ -5,7 +5,7 @@ describe("Testing the aggregation function", () => {
     const data = ["String", "Integer", "DateTime", "Float"]
 
     const aggregate = new Enumerable(data)
-      .Aggregate("", (acc, curr) => acc += curr)
+      .aggregate("", (acc, curr) => acc += curr)
 
     expect(aggregate).toEqual("StringIntegerDateTimeFloat")
   })
@@ -13,7 +13,7 @@ describe("Testing the aggregation function", () => {
     const data = ["String", "Integer", "DateTime", "Float"]
 
     const aggregate = new Enumerable(data)
-      .Aggregate({}, (acc, curr, index) => {
+      .aggregate({}, (acc, curr, index) => {
         return Object.assign(acc, {[`param${index}`]: curr})
       })
       
