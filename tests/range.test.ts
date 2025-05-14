@@ -26,4 +26,23 @@ describe("Testing the Range function", () => {
     expect(range).not.toBe([])
     expect(range).toHaveLength(million)
   })
+  it("Generation of numeric range from 0 to 1_000_000", () => {
+    const million: number = 1_000_000
+    
+    const range = Enumerable
+      .Range(0, million)
+      .ToArray()
+
+    expect(range).not.toBe([])
+    expect(range).toHaveLength(million)
+  })
+  it("Generation of a series of numbers from -10 to 1", () => {
+    const range = Enumerable
+      .Range(-10, 12)
+      .ToArray()
+
+    expect(range).toHaveLength(12)
+    expect(range).not.toBe([])
+    expect(range).toEqual([-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1])
+  })
 })
