@@ -9,6 +9,12 @@ const iterableViaGenerator = {
   }
 };
 
+const devices: Map<string, number> = new Map<string, number>([
+  ['IPhone 12', 0],
+  ['IPhone 16 Pro', 1],
+  ['IPad Pro', 2],
+])
+
 describe("Testing the ToDictionary function", () => {
   it("Creating an Dictionary instance with an array of numbers", () => {
     const dictionary = new Enumerable([1, 2, 3, 4, 5])
@@ -18,8 +24,8 @@ describe("Testing the ToDictionary function", () => {
   it("Creating an Dictionary instance with an array of numbers", () => {
     const dictionary = new Enumerable([1, 2])
       .toDictionary()
-      .getDictionary()
-    expect(dictionary).toEqual({'0': 1, '1': 2})
+    expect(dictionary.getDictionary()).toEqual({'0': 1, '1': 2})
+    expect(dictionary.size).toBe(2)
   })
   it("Creating array filtering, array conversion and dictionary conversion", () => {
     interface Data {
@@ -31,44 +37,43 @@ describe("Testing the ToDictionary function", () => {
       .map<Data>((num, index) => ({ index, num }))
       .where((obj) => obj.index === 0)
       .toDictionary()
-      .getDictionary()
-    expect(dictionary).toEqual({'0': { index: 0, num: 202 }})
+    expect(dictionary.getDictionary()).toEqual({'0': { index: 0, num: 202 }})
+    expect(dictionary.size).toBe(1)
   })
   it("Testing the presence of a value by key", () => {
     const query = new Enumerable([1, 2, 3, 4, 5])
       .toDictionary()
-      .containsKey("1")
+      .has("1")
     expect(query).toBe(true)
   })
   it("Testing when there is no value by key", () => {
     const query = new Enumerable([1, 2, 3, 4, 5])
       .toDictionary()
-      .containsKey("10")
+      .has("10")
     expect(query).toBe(false)
   })
   it("Testing Symbol iterator object", () => {
     const hasAnna = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
-      .containsKey("Anna")
+      .has("Anna")
     expect(hasAnna).toBe(true)
 
     const hasPetr = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
-      .containsKey("Petr")
+      .has("Petr")
     expect(hasPetr).toBe(false)
   })
   it("Dictionary cleaning test", () => {
     const clearedDictionary = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
       .clear()
-      .getDictionary()
-    expect(clearedDictionary).toEqual({})
+    expect(clearedDictionary.getDictionary()).toEqual({})
+    expect(clearedDictionary.size).toBe(0)
   })
   it("Dictionary add key and value", () => {
     const dictionary = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
       .add('Petr', { name: 'Petr', age: 12 })
-      .getDictionary()
     
     const result = {
       'Ivan': { name: "Ivan", age: 18 },
@@ -76,19 +81,20 @@ describe("Testing the ToDictionary function", () => {
       'Anna': { name: "Anna", age: 30 },
       'Petr': { name: "Petr", age: 12 },
     }
-    expect(dictionary).toEqual(result)
+    expect(dictionary.getDictionary()).toEqual(result)
+    expect(dictionary.size).toBe(4)
   })
   it("Add key and value after clearing the dictionary", () => {
     const dictionary = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
       .clear()
       .add('Petr', { name: 'Petr', age: 12 })
-      .getDictionary()
 
     const result = {
       'Petr': { name: "Petr", age: 12 },
     }
-    expect(dictionary).toEqual(result)
+    expect(dictionary.getDictionary()).toEqual(result)
+    expect(dictionary.size).toBe(1)
   })
   it("Dictionary add key and value error", () => {
     expect(() => new Enumerable(iterableViaGenerator)
@@ -96,5 +102,30 @@ describe("Testing the ToDictionary function", () => {
       .add('Ivan', { name: 'Ivan', age: 12 })
       .getDictionary()
     ).toThrow('The key already exists in the dictionary')
+  })
+  it("Delete a key-value pair from the dictionary", () => {
+    const dictionary = new Enumerable(iterableViaGenerator)
+      .toDictionary((item) => item.name)
+      .delete('Liza')
+      .delete('Ivan')
+
+    expect(dictionary.getDictionary()).toEqual({'Anna': { name: "Anna", age: 30 }})
+    expect(dictionary.size).toBe(1)
+  })
+  it("Error when deleting a key-value pair from the dictionary", () => {
+    expect(() => new Enumerable(iterableViaGenerator)
+      .toDictionary((item) => item.name)
+      .delete('Vahhhhh')
+    ).toThrow("This key does not exist in the dictionary")
+  })
+  it("Converting Map to Dictionary then has, delete and size", () => {
+    const resultDevices = new Enumerable(devices)
+      .toDictionary(([key, _]) => key)
+
+    expect(resultDevices.has('IPhone 12')).toBe(true)
+    expect(resultDevices.size).toBe(3)
+    expect(resultDevices.delete('IPhone 12').size).toBe(2)
+    expect(resultDevices.clear().size).toBe(0)
+    expect(resultDevices.add('IPhone 14 Pro', ['IPhone 14 Pro', 77]).size).toBe(1)
   })
 })

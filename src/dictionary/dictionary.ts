@@ -4,7 +4,7 @@ export class Dictionary<T> implements IDictionary<T> {
   private dictionary: Record<TObjectKey, T> = {};
   private index = 0;
   private keySelector: (item: T) => TObjectKey
-
+  
   constructor(
     source: Generator<T, any, any>,
     keySelector?: (item: T) => TObjectKey
@@ -22,7 +22,7 @@ export class Dictionary<T> implements IDictionary<T> {
     const dictionary = this.getDictionary()
     
     function* source() {
-      for (const [key, value] of Object.entries(dictionary)) {
+      for (const [_, value] of Object.entries(dictionary)) {
         yield value
       }
     }
@@ -30,11 +30,22 @@ export class Dictionary<T> implements IDictionary<T> {
     return source()
   }
 
+  public get size(): number {
+    let count: number = 0;
+    const source = this.getGenerator()
+
+    for (const _ of source) {
+      count++
+    }
+
+    return count
+  }
+
   public getDictionary(): Record<TObjectKey, T> {
     return this.dictionary;
   }
 
-  public containsKey(key: TObjectKey): boolean {
+  public has(key: TObjectKey): boolean {
     if(key === null || key === undefined) {
       throw new Error('Dictionary search key not specified')
     }
@@ -50,11 +61,21 @@ export class Dictionary<T> implements IDictionary<T> {
   }
 
   public add(key: TObjectKey, value: T): Dictionary<T> {
-    if(this.containsKey(key)) {
+    if(this.has(key)) {
       throw new Error('The key already exists in the dictionary')
     }
     this.dictionary = {...this.dictionary, [key]: value}
     this.index++
+    const source = this.getGenerator()
+    return new Dictionary(source, this.keySelector)
+  }
+
+  public delete(key: TObjectKey): Dictionary<T> {
+    if(!this.has(key)) {
+      throw new Error('This key does not exist in the dictionary')
+    }
+    delete this.dictionary[key]
+    this.index--
     const source = this.getGenerator()
     return new Dictionary(source, this.keySelector)
   }

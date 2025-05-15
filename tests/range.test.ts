@@ -26,16 +26,6 @@ describe("Testing the range function", () => {
     expect(range).not.toBe([])
     expect(range).toHaveLength(million)
   })
-  it("Generation of numeric range from 0 to 1_000_000", () => {
-    const million: number = 1_000_000
-    
-    const range = Enumerable
-      .range(0, million)
-      .toArray()
-
-    expect(range).not.toBe([])
-    expect(range).toHaveLength(million)
-  })
   it("Generation of a series of numbers from -10 to 1", () => {
     const range = Enumerable
       .range(-10, 12)

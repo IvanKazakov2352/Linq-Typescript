@@ -17,8 +17,10 @@ export interface IEnumerable<T> {
 }
 
 export interface IDictionary<T> {
+  size: number;
   getDictionary(): Record<TObjectKey, T>;
-  containsKey(key: TObjectKey): boolean;
+  has(key: TObjectKey): boolean;
   clear(): Dictionary<T>;
   add(key: TObjectKey, value: T): Dictionary<T>;
+  delete(key: TObjectKey): Dictionary<T>;
 }
