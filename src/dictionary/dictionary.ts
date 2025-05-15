@@ -3,24 +3,27 @@ import { IDictionary, TObjectKey } from "../types/types";
 export class Dictionary<T> implements IDictionary<T> {
   private dictionary: Record<TObjectKey, T> = {};
   private index = 0;
+  private keySelector: (item: T) => TObjectKey
 
   constructor(
     source: Generator<T, any, any>,
     keySelector?: (item: T) => TObjectKey
   ) {
+    this.keySelector = keySelector ?? ((item: T) => this.index)
+
     for (const item of source) {
-      const key = keySelector ? keySelector(item) : this.index;
+      const key = this.keySelector(item)
       this.dictionary[key] = item;
       this.index++;
     }
   }
 
-  private getGenerator() {
-    const dict = this.getDictionary()
+  private getGenerator(): Generator<T> {
+    const dictionary = this.getDictionary()
     
     function* source() {
-      for (let key of Object.keys(dict)) {
-        yield [key, dict[key]];
+      for (const [key, value] of Object.entries(dictionary)) {
+        yield value
       }
     }
 
@@ -39,10 +42,20 @@ export class Dictionary<T> implements IDictionary<T> {
     return Object.prototype.hasOwnProperty.call(dictionary, key);
   }
 
-  public clear() {
+  public clear(): Dictionary<T> {
     this.dictionary = {}
     this.index = 0
     const source = this.getGenerator()
-    return new Dictionary(source)
+    return new Dictionary(source, this.keySelector)
+  }
+
+  public add(key: TObjectKey, value: T): Dictionary<T> {
+    if(this.containsKey(key)) {
+      throw new Error('The key already exists in the dictionary')
+    }
+    this.dictionary = {...this.dictionary, [key]: value}
+    this.index++
+    const source = this.getGenerator()
+    return new Dictionary(source, this.keySelector)
   }
 }

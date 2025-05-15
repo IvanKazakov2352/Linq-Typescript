@@ -1,7 +1,7 @@
 import { Dictionary } from "../dictionary/dictionary";
 import { Enumerable } from "../enumerable/enumerable"
 
-export type TObjectKey = string | symbol
+export type TObjectKey = string | symbol | number
 
 export interface IEnumerable<T> {
   isDisposed$: boolean;
@@ -19,5 +19,6 @@ export interface IEnumerable<T> {
 export interface IDictionary<T> {
   getDictionary(): Record<TObjectKey, T>;
   containsKey(key: TObjectKey): boolean;
-  clear(): void;
+  clear(): Dictionary<T>;
+  add(key: TObjectKey, value: T): Dictionary<T>;
 }

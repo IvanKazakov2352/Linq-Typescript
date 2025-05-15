@@ -1,6 +1,14 @@
 import { Dictionary } from "../src/dictionary/dictionary"
 import { Enumerable } from "../src/enumerable/enumerable"
 
+const iterableViaGenerator = {
+  *[Symbol.iterator]() {
+    yield { name: "Ivan", age: 18 };
+    yield { name: "Liza", age: 25 };
+    yield { name: "Anna", age: 30 };
+  }
+};
+
 describe("Testing the ToDictionary function", () => {
   it("Creating an Dictionary instance with an array of numbers", () => {
     const dictionary = new Enumerable([1, 2, 3, 4, 5])
@@ -39,13 +47,6 @@ describe("Testing the ToDictionary function", () => {
     expect(query).toBe(false)
   })
   it("Testing Symbol iterator object", () => {
-    const iterableViaGenerator = {
-      *[Symbol.iterator]() {
-        yield { name: "Ivan", age: 18 };
-        yield { name: "Liza", age: 25 };
-        yield { name: "Anna", age: 30 };
-      }
-    };
     const hasAnna = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
       .containsKey("Anna")
@@ -57,17 +58,43 @@ describe("Testing the ToDictionary function", () => {
     expect(hasPetr).toBe(false)
   })
   it("Dictionary cleaning test", () => {
-    const iterableViaGenerator = {
-      *[Symbol.iterator]() {
-        yield { name: "Ivan", age: 18 };
-        yield { name: "Liza", age: 25 };
-        yield { name: "Anna", age: 30 };
-      }
-    };
     const clearedDictionary = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
       .clear()
       .getDictionary()
     expect(clearedDictionary).toEqual({})
+  })
+  it("Dictionary add key and value", () => {
+    const dictionary = new Enumerable(iterableViaGenerator)
+      .toDictionary((item) => item.name)
+      .add('Petr', { name: 'Petr', age: 12 })
+      .getDictionary()
+    
+    const result = {
+      'Ivan': { name: "Ivan", age: 18 },
+      'Liza': { name: "Liza", age: 25 },
+      'Anna': { name: "Anna", age: 30 },
+      'Petr': { name: "Petr", age: 12 },
+    }
+    expect(dictionary).toEqual(result)
+  })
+  it("Add key and value after clearing the dictionary", () => {
+    const dictionary = new Enumerable(iterableViaGenerator)
+      .toDictionary((item) => item.name)
+      .clear()
+      .add('Petr', { name: 'Petr', age: 12 })
+      .getDictionary()
+
+    const result = {
+      'Petr': { name: "Petr", age: 12 },
+    }
+    expect(dictionary).toEqual(result)
+  })
+  it("Dictionary add key and value error", () => {
+    expect(() => new Enumerable(iterableViaGenerator)
+      .toDictionary((item) => item.name)
+      .add('Ivan', { name: 'Ivan', age: 12 })
+      .getDictionary()
+    ).toThrow('The key already exists in the dictionary')
   })
 })
