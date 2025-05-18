@@ -79,4 +79,8 @@ export class Dictionary<T> implements IDictionary<T> {
     const source = this.getGenerator()
     return new Dictionary(source, this.keySelector)
   }
+
+  public get(key: TObjectKey): T | null {
+    return this.has(key) ? this.dictionary[key] : null
+  }
 }

@@ -23,4 +23,5 @@ export interface IDictionary<T> {
   clear(): Dictionary<T>;
   add(key: TObjectKey, value: T): Dictionary<T>;
   delete(key: TObjectKey): Dictionary<T>;
+  get(key:TObjectKey): T | null;
 }
