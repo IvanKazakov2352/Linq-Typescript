@@ -14,9 +14,9 @@ export class Enumerable<T> implements IEnumerable<T> {
   private iterator: Iterable<T>;
   private isDisposed: boolean = false;
 
-  public get isDisposed$(): boolean {
-    return this.isDisposed;
-  };
+  public [Symbol.dispose]() {
+    this.dispose()
+  }
 
   public [Symbol.iterator](): Iterator<T> {
     if (this.isDisposed) {
@@ -50,8 +50,7 @@ export class Enumerable<T> implements IEnumerable<T> {
         if (callback(value, index++)) {
           yield value;
         };
-      };
-    };
+      };    };
 
     return new Enumerable<T>(generator());
   };

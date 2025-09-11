@@ -124,4 +124,21 @@ describe("Testing the ToDictionary function", () => {
     expect(resultDevices.clear().size).toBe(0)
     expect(resultDevices.add('IPhone 14 Pro', ['IPhone 14 Pro', 77]).size).toBe(1)
   })
+  it("Getting element by key from generator", () => {
+    const names = new Enumerable(iterableViaGenerator)
+      .toDictionary((i) => i.age)
+
+    expect(names.get(18)).toEqual({ name: "Ivan", age: 18 })
+    expect(names.get(12)).toBe(null)
+    expect(names.get(30)).not.toBe(null)
+    expect(names.get(30)).toEqual({ name: "Anna", age: 30 })
+  })
+  it("Getting element by key from map collection", () => {
+    const result = new Enumerable(devices)
+      .toDictionary(([key, value]) => key)
+
+    expect(result.get('IPad Pro')).not.toBe(null)
+    expect(result.get('IPad Pro')).toEqual(['IPad Pro', 2])
+    expect(result.get('IPad Pro2')).toBe(null)
+  })
 })

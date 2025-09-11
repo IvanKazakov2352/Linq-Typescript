@@ -3,7 +3,8 @@ import { IDictionary, TObjectKey } from "../types/types";
 export class Dictionary<T> implements IDictionary<T> {
   private dictionary: Record<TObjectKey, T> = {};
   private index = 0;
-  private keySelector: (item: T) => TObjectKey
+  private keySelector: (item: T) => TObjectKey;
+  private isDisposed: boolean = false;
   
   constructor(
     source: Generator<T, any, any>,
@@ -16,6 +17,15 @@ export class Dictionary<T> implements IDictionary<T> {
       this.dictionary[key] = item;
       this.index++;
     }
+  }
+
+  public [Symbol.dispose]() {
+    if(this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object.");
+    };
+
+    this.clear()
+    this.isDisposed = true;
   }
 
   private getGenerator(): Generator<T> {

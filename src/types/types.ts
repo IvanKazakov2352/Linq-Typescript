@@ -1,10 +1,9 @@
 import { Dictionary } from "../dictionary/dictionary";
-import { Enumerable } from "../enumerable/enumerable"
+import { Enumerable } from "../enumerable/enumerable";
 
 export type TObjectKey = string | symbol | number
 
 export interface IEnumerable<T> {
-  isDisposed$: boolean;
   where: (callback: (value: T, index: number) => boolean) => Enumerable<T>;
   map: <TResult>(callback: (value: T, index: number) => TResult) => Enumerable<TResult>;
   dispose: () => void;
@@ -23,5 +22,5 @@ export interface IDictionary<T> {
   clear(): Dictionary<T>;
   add(key: TObjectKey, value: T): Dictionary<T>;
   delete(key: TObjectKey): Dictionary<T>;
-  get(key:TObjectKey): T | null;
+  get(key: TObjectKey): T | null;
 }
