@@ -2,28 +2,25 @@ import { Enumerable } from "../src/enumerable/enumerable"
 
 describe('Testing the where method', () => {
   it('Filtering of odd numbers', () => {
-    const query = new Enumerable(Enumerable.range(0, 20))
+    using query = new Enumerable(Enumerable.range(0, 20))
       .where(num => num % 2 === 0)
-      .toArray()
       
-    expect(query).toHaveLength(10)
-    expect(query).not.toBe([])
+    expect(query.toArray()).toHaveLength(10)
+    expect(query.toArray()).not.toBe([])
   })
   it('Filtering two numbers 10 and 20', () => {
-    const query = new Enumerable(Enumerable.range(0, 20))
+    using query = new Enumerable(Enumerable.range(0, 20))
       .where(num => num !== 10 && num !== 20)
-      .toArray()
 
-    expect(query).toHaveLength(19)
-    expect(query).not.toBe([])
+    expect(query.toArray()).toHaveLength(19)
+    expect(query.toArray()).not.toBe([])
   })
   it('Filtering key-value pairs in Map collection', () => {
     const statuses: Map<number, string> = new Map<number, string>([[1, 'Success'], [2, 'Failed'], [3, 'Pending']])
-    const enumerable = new Enumerable(statuses)
-
-    const query = enumerable
+    const query = new Enumerable(statuses)
       .where(([key, value]) => key === 1 || key === 3 && value === 'Pending')
       .toArray()
+      
 
     expect(query).not.toBe([])
     expect(query).toHaveLength(2)

@@ -6,6 +6,8 @@ export type TObjectKey = string | symbol | number
 export interface IEnumerable<T> {
   where: (callback: (value: T, index: number) => boolean) => Enumerable<T>;
   map: <TResult>(callback: (value: T, index: number) => TResult) => Enumerable<TResult>;
+  take(count: number): Enumerable<T>;
+  skip(count: number): Enumerable<T>;
   dispose: () => void;
   aggregate: <TAccumulate>(
     seed: TAccumulate, 

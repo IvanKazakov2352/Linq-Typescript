@@ -50,7 +50,8 @@ export class Enumerable<T> implements IEnumerable<T> {
         if (callback(value, index++)) {
           yield value;
         };
-      };    };
+      };    
+    };
 
     return new Enumerable<T>(generator());
   };
@@ -67,6 +68,41 @@ export class Enumerable<T> implements IEnumerable<T> {
 
     return new Enumerable<TResult>(generator());
   };
+
+  public take(count: number): Enumerable<T> {
+    const source = this.getGenerator();
+
+    function* generator(): Generator<T> {
+      let taken = 0;
+      
+      for (const item of source) {
+        if (taken++ < count) {
+          yield item;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return new Enumerable<T>(generator());
+  }
+
+  public skip(count: number): Enumerable<T> {
+    const source = this.getGenerator();
+    
+    function* generator(): Generator<T> {
+      let skipped = 0;
+
+      for (const item of source) {
+        if (skipped++ < count) {
+          continue;
+        }
+        yield item;
+      }
+    }
+    
+    return new Enumerable<T>(generator());
+  }
 
   public static range(start: number, count: number): Enumerable<number> {
     if (!Number.isSafeInteger(start) || !Number.isSafeInteger(count)) {
