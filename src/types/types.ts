@@ -25,4 +25,5 @@ export interface IDictionary<T> {
   add(key: TObjectKey, value: T): Dictionary<T>;
   delete(key: TObjectKey): Dictionary<T>;
   get(key: TObjectKey): T | null;
+  dispose(): void;
 }
