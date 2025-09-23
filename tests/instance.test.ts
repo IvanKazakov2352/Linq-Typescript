@@ -43,4 +43,11 @@ describe('Creating an Enumerable instance', () => {
     using instance = new Enumerable(iterableObject)
     expect(instance).toBeInstanceOf(Enumerable)
   })
+  it('Generating 2,000,000 values', () => {
+    using instance = new Enumerable(Enumerable.range(0, 2_000_000))
+    const result = instance.toArray()
+
+    expect(result).toHaveLength(2_000_000)
+    expect(result).not.toEqual([])
+  })
 })

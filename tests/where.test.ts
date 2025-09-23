@@ -48,4 +48,10 @@ describe('Testing the where method', () => {
     expect(result).toHaveLength(2)
     expect(result).toEqual([users[0], users[2]])
   })
+
+  it('Callback argument error', () => {
+    expect(() => new Enumerable([1, 2]).where('str' as any)).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).where(1213123 as any)).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).where((i) => i === 2)).not.toThrow('Callback must be a function')
+  })
 })

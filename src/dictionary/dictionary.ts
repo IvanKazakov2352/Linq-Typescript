@@ -1,4 +1,5 @@
 import { IDictionary, TObjectKey } from "../types/types";
+import { isFunction } from "../utils/utils";
 
 export class Dictionary<T> implements IDictionary<T> {
   private dictionary: Record<TObjectKey, T> = {};
@@ -10,6 +11,10 @@ export class Dictionary<T> implements IDictionary<T> {
     source: Generator<T, any, any>,
     keySelector?: (item: T) => TObjectKey
   ) {
+    if(keySelector && !isFunction(keySelector)) {
+      throw new TypeError('Callback must be a function');
+    }
+    
     this.keySelector = keySelector ?? ((item: T) => this.index)
 
     for (const item of source) {
@@ -55,7 +60,8 @@ export class Dictionary<T> implements IDictionary<T> {
       throw new Error("Cannot iterate over a disposed object");
     };
     
-    this.clear()
+    this.dictionary = {}
+    this.index = 0
     this.isDisposed = true
   }
 

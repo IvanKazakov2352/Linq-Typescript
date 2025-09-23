@@ -57,4 +57,9 @@ describe("Testing the Map function", () => {
     expect(result).toHaveLength(1)
     expect(result).toEqual([{index: 0, num: 202}])
   })
+  it('Callback argument error', () => {
+    expect(() => new Enumerable([1, 2]).map('str' as any)).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).map(1213123 as any)).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).map((i) => i * 2)).not.toThrow('Callback must be a function')
+  })
 })

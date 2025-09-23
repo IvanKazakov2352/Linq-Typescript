@@ -28,4 +28,9 @@ describe("Testing the aggregation function", () => {
       })
     }
   })
+  it('Callback argument error', () => {
+    expect(() => new Enumerable([1, 2]).aggregate(0, 'str' as any)).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).aggregate(0, (1213123 as any))).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).aggregate(0, (acc, curr) => acc += curr)).not.toThrow('Callback must be a function')
+  })
 })

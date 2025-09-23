@@ -45,5 +45,6 @@ describe("Testing the take function", () => {
     using query = new Enumerable(Enumerable.range(0, 100))
 
     expect(() => query.take(('str') as any)).toThrow('Arguments must be safe integers')
+    expect(() => query.take(10)).not.toThrow('Arguments must be safe integers')
   });
 });

@@ -13,6 +13,7 @@ describe("Testing the range function", () => {
   it("Testing invalid arguments in range method", () => {
     expect(() => Enumerable.range(1, -1)).toThrow(`Count must be non-negative. Received ${-1}`)
     expect(() => Enumerable.range(([1, 2, 3]) as any, ('string') as any)).toThrow(`Arguments must be safe integers`)
+    expect(() => Enumerable.range(10, 25)).not.toThrow('Arguments must be safe integers')
     expect(() => Enumerable.range(INT32_MIN - 500, 1)).toThrow(`Start must be between ${INT32_MIN} and ${INT32_MAX}`)
     expect(() => Enumerable.range(INT32_MAX + 500, 1)).toThrow(`Start must be between ${INT32_MIN} and ${INT32_MAX}`)
     expect(() => Enumerable.range(22, INT32_MAX + 500)).toThrow(`Count must be at most ${INT32_MAX}`)

@@ -51,7 +51,10 @@ describe("Testing the ToDictionary function", () => {
   it("Testing Symbol iterator object", () => {
     using hasAnna = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
-      
+
+    const keys = Object.keys(hasAnna.getDictionary())
+
+    expect(keys).toEqual(['Ivan', 'Liza', 'Anna'])
     expect(hasAnna.has("Anna")).toBe(true)
 
     using hasPetr = new Enumerable(iterableViaGenerator)
@@ -63,7 +66,10 @@ describe("Testing the ToDictionary function", () => {
     using clearedDictionary = new Enumerable(iterableViaGenerator)
       .toDictionary((item) => item.name)
       .clear()
-
+      
+    const keys = Object.keys(clearedDictionary.getDictionary())
+    
+    expect(keys).toEqual([])
     expect(clearedDictionary.getDictionary()).toEqual({})
     expect(clearedDictionary.size).toBe(0)
   })
@@ -130,7 +136,8 @@ describe("Testing the ToDictionary function", () => {
   it("Getting element by key from generator", () => {
     using names = new Enumerable(iterableViaGenerator)
       .toDictionary((i) => i.age)
-
+    
+    expect(Object.keys(names.getDictionary())).toEqual(["18", "25", "30"])
     expect(names.get(18)).toEqual({ name: "Ivan", age: 18 })
     expect(names.get(12)).toBe(null)
     expect(names.get(30)).not.toBe(null)
@@ -143,5 +150,11 @@ describe("Testing the ToDictionary function", () => {
     expect(result.get('IPad Pro')).not.toBe(null)
     expect(result.get('IPad Pro')).toEqual(['IPad Pro', 2])
     expect(result.get('IPad Pro2')).toBe(null)
+  })
+  it("Callback argument error", () => {
+    expect(() => new Enumerable([1, 2]).toDictionary('str' as any)).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).toDictionary(1213123 as any)).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).toDictionary((i) => `item${i}`)).not.toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).toDictionary()).not.toThrow('Callback must be a function')
   })
 })

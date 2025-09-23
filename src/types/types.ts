@@ -8,6 +8,7 @@ export interface IEnumerable<T> {
   map: <TResult>(callback: (value: T, index: number) => TResult) => Enumerable<TResult>;
   take(count: number): Enumerable<T>;
   skip(count: number): Enumerable<T>;
+  slice(start: number, end?: number | undefined): Enumerable<T>;
   dispose: () => void;
   aggregate: <TAccumulate>(
     seed: TAccumulate, 

@@ -33,5 +33,6 @@ describe("Testing the Dispose function", () => {
     expect(() => dict.get(8)).toThrow(errorText)
     expect(() => dict.getDictionary()).toThrow(errorText)
     expect(() => dict.has(8)).toThrow(errorText)
+    expect(() => dict.size).toThrow(errorText)
   })
 })
