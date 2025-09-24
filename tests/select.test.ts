@@ -1,6 +1,6 @@
 import { Enumerable } from "../src/enumerable/enumerable"
 
-describe("Testing the Select function", () => {
+describe("Select", () => {
   it("Testing the Select function with a numeric array", () => {
     using query = new Enumerable([1, 2, 3, 4, 5])
       .select(num => num += 2 * 5)
@@ -61,5 +61,6 @@ describe("Testing the Select function", () => {
     expect(() => new Enumerable([1, 2]).select('str' as any)).toThrow('Callback must be a function')
     expect(() => new Enumerable([1, 2]).select(1213123 as any)).toThrow('Callback must be a function')
     expect(() => new Enumerable([1, 2]).select((i) => i * 2)).not.toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).select(null as any)).toThrow('Callback must be a function')
   })
 })

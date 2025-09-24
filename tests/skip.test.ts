@@ -1,6 +1,6 @@
 import { Enumerable } from "../src/enumerable/enumerable";
 
-describe("Testing the take function", () => {
+describe("Skip", () => {
   it("Skipping first 50 values", () => {
     using query = new Enumerable(Enumerable.range(0, 100))
       .skip(50)

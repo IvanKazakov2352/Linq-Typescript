@@ -1,6 +1,6 @@
 import { Enumerable } from "../src/enumerable/enumerable";
 
-describe("Testing the slice function", () => {
+describe("Slice", () => {
   it("Slice from 5 to 15", () => {
     using query = new Enumerable(Enumerable.range(0, 15))
       .slice(5, 15)

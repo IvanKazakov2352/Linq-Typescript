@@ -41,6 +41,30 @@ export class Enumerable<T> implements IEnumerable<T> {
     };
   };
 
+  public any(callback?: (item: T, index: number) => boolean): boolean {
+    if(this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
+    };
+
+    if(callback && !isFunction(callback)) {
+      throw new TypeError('Callback must be a function');
+    }
+
+    const source = this.getGenerator();
+
+    if (callback) {
+      let index = 0;
+      for (const item of source) {
+        if (callback(item, index++)) {
+          return true;
+        }
+      }
+      return false;
+    } else {
+      return !source.next().done;
+    }
+  }
+
   public where(callback: (value: T, index: number) => boolean): Enumerable<T> {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
@@ -111,6 +135,32 @@ export class Enumerable<T> implements IEnumerable<T> {
     return new Enumerable<T>(generator());
   }
 
+  public takeWhile(callback: (value: T, index: number) => boolean): Enumerable<T> {
+    if(this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
+    };
+
+    if(!isFunction(callback)) {
+      throw new TypeError('Callback must be a function');
+    }
+
+    const source = this.getGenerator();
+
+    function* generator(): Generator<T> {
+      let index = 0;
+
+      for (const item of source) {
+        if (callback(item, index++)) {
+          yield item;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return new Enumerable(generator())
+  }
+
   public skip(count: number): Enumerable<T> {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
@@ -134,6 +184,36 @@ export class Enumerable<T> implements IEnumerable<T> {
     }
     
     return new Enumerable<T>(generator());
+  }
+
+  public skipWhile(callback: (value: T, index: number) => boolean): Enumerable<T> {
+    if(this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
+    };
+
+    if(!isFunction(callback)) {
+      throw new TypeError('Callback must be a function');
+    }
+
+    const source = this.getGenerator();
+
+    function* generator(): Generator<T> {
+      let index = 0;
+      let skipping = true;
+
+      for (const item of source) {
+        if (skipping) {
+          if (!callback(item, index++)) {
+            skipping = false;
+            yield item;
+          }
+        } else {
+          yield item;
+        }
+      }
+    }
+
+    return new Enumerable(generator())
   }
 
   public slice(
@@ -210,29 +290,6 @@ export class Enumerable<T> implements IEnumerable<T> {
     }
 
     return new Enumerable<number>(generator());
-  };
-
-  public aggregate<TAccumulate>(
-    seed: TAccumulate, 
-    callback: (acc: TAccumulate, current: T, index: number) => TAccumulate
-  ): TAccumulate {
-    if(this.isDisposed) {
-      throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if(!isFunction(callback)) {
-      throw new TypeError('Callback must be a function');
-    }
-
-    const source = this.getGenerator();
-    let accumulator = seed;
-
-    let index = 0;
-    for (const item of source) {
-      accumulator = callback(accumulator, item, index++);
-    }
-
-    return accumulator;
   };
 
   public toArray(): T[] {

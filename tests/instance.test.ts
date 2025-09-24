@@ -1,9 +1,8 @@
 import { Enumerable } from "../src/enumerable/enumerable"
-import { numbers } from "./mock-data"
 
-describe('Creating an Enumerable instance', () => {
+describe('Enumerable instance', () => {
   it('Creating an Enumerable instance with an array of numbers', () => {
-    using instance = new Enumerable(numbers(15))
+    using instance = new Enumerable(Enumerable.range(0, 15))
     expect(instance).toBeInstanceOf(Enumerable)
   })
   it('Creating an Enumerable instance with a string', () => {
@@ -15,19 +14,19 @@ describe('Creating an Enumerable instance', () => {
     expect(instance).toBeInstanceOf(Enumerable)
   })
   it('Creating an Enumerable instance with a Set collection', () => {
-    using instance = new Enumerable(new Set(numbers(15)))
+    using instance = new Enumerable(new Set(Enumerable.range(0, 15)))
     expect(instance).toBeInstanceOf(Enumerable)
   })
   it('Creating an Enumerable instance with a typed array Uint32Array', () => {
-    using instance = new Enumerable(new Uint32Array(numbers(15)))
+    using instance = new Enumerable(new Uint32Array(Enumerable.range(0, 15)))
     expect(instance).toBeInstanceOf(Enumerable)
   })
   it('Creating an Enumerable instance with a typed array Uint8Array', () => {
-    using instance = new Enumerable(new Uint8Array(numbers(15)))
+    using instance = new Enumerable(new Uint8Array(Enumerable.range(0, 15)))
     expect(instance).toBeInstanceOf(Enumerable)
   })
   it('Creating an Enumerable instance with a typed array Uint16Array', () => {
-    using instance = new Enumerable(new Uint16Array(numbers(15)))
+    using instance = new Enumerable(new Uint16Array(Enumerable.range(0, 15)))
     expect(instance).toBeInstanceOf(Enumerable)
   })
   it('Creating an Enumerable instance with an iterated object', () => {

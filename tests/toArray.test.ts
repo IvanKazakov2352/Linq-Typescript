@@ -1,6 +1,6 @@
 import { Enumerable } from "../src/enumerable/enumerable"
 
-describe("Testing the toArray function", () => {
+describe("ToArray", () => {
   it("Testing the toArray function", () => {
     using query = new Enumerable([1, 2, 3, 4, 5])
 

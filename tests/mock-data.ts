@@ -4,6 +4,15 @@ export interface User {
   id: number;
 }
 
+export interface IValue {
+  code: number;
+  timeStamp: number;
+  timeStamp2: number;
+  value: number;
+}
+
+const minute: number = 60000
+
 export const getUsers = (count: number): User[] => {
   const users: User[] = [];
 
@@ -18,12 +27,17 @@ export const getUsers = (count: number): User[] => {
   return users
 }
 
-export const numbers = (count: number): number[] => {
-  const numbers: number[] = [];
+export const getMockData = (count: number): IValue[] => {
+  const values: IValue[] = [];
 
   for (let i = 0; i < count; i++) {
-    numbers.push(i)
+    values.push({
+      code: Math.floor(Math.random() * 600000),
+      timeStamp: new Date().getTime(),
+      timeStamp2: new Date().getTime() + minute * i,
+      value: i += i << 2
+    })
   }
 
-  return numbers
-};
+  return values
+}

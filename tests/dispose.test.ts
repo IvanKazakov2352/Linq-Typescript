@@ -1,6 +1,6 @@
 import { Enumerable } from "../src/enumerable/enumerable"
 
-describe("Testing the Dispose function", () => {
+describe("Dispose", () => {
   it("Testing the Dispose function", () => {
     const query = new Enumerable([1, 2, 3, 4, 5])
     const result = query.toArray()
@@ -16,7 +16,6 @@ describe("Testing the Dispose function", () => {
     expect(() => query.where(num => num === 1)).toThrow(errorText)
     expect(() => query.toArray()).toThrow(errorText)
     expect(() => query.toDictionary()).toThrow(errorText)
-    expect(() => query.aggregate(0, (acc, curr) => acc += curr)).toThrow(errorText)
     expect(() => query.select((i) => i.toFixed(0))).toThrow(errorText)
     expect(() => query.skip(1)).toThrow(errorText)
     expect(() => query.take(1)).toThrow(errorText)

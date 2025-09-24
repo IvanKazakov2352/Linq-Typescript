@@ -15,7 +15,7 @@ const devices: Map<string, number> = new Map<string, number>([
   ['IPad Pro', 2],
 ])
 
-describe("Testing the ToDictionary function", () => {
+describe("Dictionary", () => {
   it("Creating an Dictionary instance with an array of numbers", () => {
     using dictionary = new Enumerable([1, 2, 3, 4, 5])
       .toDictionary()

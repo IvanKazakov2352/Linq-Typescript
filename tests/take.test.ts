@@ -1,9 +1,10 @@
 import { Enumerable } from "../src/enumerable/enumerable";
-import { numbers, getUsers } from "./mock-data"
+import { getUsers } from "./mock-data"
 
-describe("Testing the take function", () => {
+describe("Take", () => {
   it("First three numbers test", () => {
-    using query = new Enumerable(numbers(15)).take(3)
+    using query = new Enumerable(Enumerable.range(0, 15))
+      .take(3)
 
     const result = query.toArray()
     expect(result.length).toBe(3);
@@ -22,7 +23,7 @@ describe("Testing the take function", () => {
   });
 
   it("Take + where", () => {
-    using query = new Enumerable(numbers(15))
+    using query = new Enumerable(Enumerable.range(0, 15))
       .take(7)
       .where(num => num === 1 || num === 6)
 
@@ -33,7 +34,8 @@ describe("Testing the take function", () => {
   });
 
   it("Take + range", () => {
-    using query = new Enumerable(Enumerable.range(2, 9)).take(4)
+    using query = new Enumerable(Enumerable.range(2, 9))
+      .take(4)
 
     const result = query.toArray()
     expect(result.length).toBe(4);

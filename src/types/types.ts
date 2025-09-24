@@ -7,15 +7,14 @@ export interface IEnumerable<T> {
   where: (callback: (value: T, index: number) => boolean) => Enumerable<T>;
   select: <TResult>(callback: (value: T, index: number) => TResult) => Enumerable<TResult>;
   take(count: number): Enumerable<T>;
+  takeWhile(callback: (value: T, index: number) => boolean): Enumerable<T>;
   skip(count: number): Enumerable<T>;
+  skipWhile(callback: (value: T, index: number) => boolean): Enumerable<T>;
   slice(start: number, end?: number | undefined): Enumerable<T>;
   dispose: () => void;
-  aggregate: <TAccumulate>(
-    seed: TAccumulate, 
-    callback: (acc: TAccumulate, current: T, index: number) => TAccumulate
-  ) => TAccumulate;
   toArray(): T[];
   toDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T>;
+  any(callback?: (item: T, index: number) => boolean): boolean;
 }
 
 export interface IDictionary<T> {

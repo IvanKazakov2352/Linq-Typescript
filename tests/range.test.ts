@@ -1,7 +1,7 @@
 import { Enumerable } from "../src/enumerable/enumerable"
 import { INT32_MAX, INT32_MIN } from "../src/utils/constants"
 
-describe("Testing the range function", () => {
+describe("Range", () => {
   it("Testing the range function", () => {
     using range = Enumerable.range(5, 5)
     const result = range.toArray()
