@@ -29,8 +29,8 @@ describe("Testing the ToDictionary function", () => {
   })
   it("Creating array filtering, array conversion and dictionary conversion", () => {
     using dictionary = new Enumerable([2, 4, 6, 8, 10])
-      .map(num => num * 100 + num)
-      .map((num, index) => ({ index, num }))
+      .select(num => num * 100 + num)
+      .select((num, index) => ({ index, num }))
       .where((obj) => obj.index === 0)
       .toDictionary()
     expect(dictionary.getDictionary()).toEqual({'0': { index: 0, num: 202 }})

@@ -64,7 +64,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     return new Enumerable<T>(generator());
   };
 
-  public map<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
+  public select<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     };

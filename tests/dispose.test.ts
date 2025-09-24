@@ -17,7 +17,7 @@ describe("Testing the Dispose function", () => {
     expect(() => query.toArray()).toThrow(errorText)
     expect(() => query.toDictionary()).toThrow(errorText)
     expect(() => query.aggregate(0, (acc, curr) => acc += curr)).toThrow(errorText)
-    expect(() => query.map((i) => i.toFixed(0))).toThrow(errorText)
+    expect(() => query.select((i) => i.toFixed(0))).toThrow(errorText)
     expect(() => query.skip(1)).toThrow(errorText)
     expect(() => query.take(1)).toThrow(errorText)
 

@@ -7,7 +7,7 @@ describe('Creating an Enumerable instance', () => {
     expect(instance).toBeInstanceOf(Enumerable)
   })
   it('Creating an Enumerable instance with a string', () => {
-    using instance = new Enumerable('СтрокаСтрокаСтрока')
+    using instance = new Enumerable('String')
     expect(instance).toBeInstanceOf(Enumerable)
   })
   it('Creating an Enumerable instance with a Map collection', () => {
@@ -49,5 +49,8 @@ describe('Creating an Enumerable instance', () => {
 
     expect(result).toHaveLength(2_000_000)
     expect(result).not.toEqual([])
+  })
+  it('Not creating instance', () => {
+    expect(() => new Enumerable(123123 as any)).toThrow('The iterator object cannot be empty')
   })
 })

@@ -18,19 +18,19 @@ describe("Testing the take function", () => {
     expect(result).toHaveLength(10)
     expect(result).toEqual(Enumerable.range(50, 10).toArray())
   });
-  it("Skipping first 10 values and map transformation", () => {
+  it("Skipping first 10 values and select transformation", () => {
     using query = new Enumerable(Enumerable.range(0, 20))
       .skip(10)
-      .map(i => i * 2)
+      .select(i => i * 2)
 
     const result = query.toArray()
     expect(result).toEqual([20, 22, 24, 26, 28, 30, 32, 34, 36, 38])
     expect(result).toHaveLength(10)
   });
-  it("Skipping first 10 values and map transformation + take", () => {
+  it("Skipping first 10 values and select transformation + take", () => {
     using query = new Enumerable(Enumerable.range(0, 20))
       .skip(10)
-      .map(i => i * 2)
+      .select(i => i * 2)
       .take(5)
 
     const result = query.toArray()

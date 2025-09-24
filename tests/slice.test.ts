@@ -36,7 +36,7 @@ describe("Testing the slice function", () => {
       .slice(5, 15)
       .skip(2)
       .take(4)
-      .map(i => i + 5)
+      .select(i => i + 5)
 
     const result = query.toArray()
 
