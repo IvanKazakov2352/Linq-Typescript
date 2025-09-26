@@ -1,12 +1,22 @@
 import { Dictionary } from "../dictionary/dictionary";
 import { IEnumerable, TObjectKey } from "../types/types";
-import { INT32_MAX, INT32_MIN } from "../utils/constants";
 import { isFunction, isIterable } from "../utils/utils";
+import {
+  anyFunction,
+  rangeFunction,
+  selectFunction,
+  skipFuntion,
+  skipWhileFunction,
+  sliceFunction,
+  takeFunction,
+  takeWhileFunction,
+  whereFunction,
+} from "./operators";
 
 export class Enumerable<T> implements IEnumerable<T> {
   constructor(iterator: Iterable<T>) {
-    if(iterator === undefined || !isIterable<T>(iterator)) {
-      throw new Error('The iterator object cannot be empty')
+    if (iterator === undefined || !isIterable<T>(iterator)) {
+      throw new Error("The iterator object cannot be empty");
     }
     this.iterator = iterator;
   }
@@ -15,300 +25,122 @@ export class Enumerable<T> implements IEnumerable<T> {
   private isDisposed: boolean = false;
 
   public [Symbol.dispose]() {
-    this.dispose()
+    this.dispose();
   }
 
   public [Symbol.iterator](): Iterator<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
+    }
 
     return this.iterator[Symbol.iterator]();
-  };
+  }
 
   public dispose(): void {
-    if(this.isDisposed) {
+    if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
+    }
 
     this.iterator = [] as Iterable<T>;
     this.isDisposed = true;
-  };
+  }
 
   private *getGenerator(): Generator<T> {
     for (const item of this.iterator) {
       yield item;
-    };
-  };
+    }
+  }
 
   public any(callback?: (item: T, index: number) => boolean): boolean {
-    if(this.isDisposed) {
+    if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if(callback && !isFunction(callback)) {
-      throw new TypeError('Callback must be a function');
     }
 
-    const source = this.getGenerator();
-
-    if (callback) {
-      let index = 0;
-      for (const item of source) {
-        if (callback(item, index++)) {
-          return true;
-        }
-      }
-      return false;
-    } else {
-      return !source.next().done;
-    }
+    return anyFunction<T>(this.getGenerator(), callback);
   }
 
   public where(callback: (value: T, index: number) => boolean): Enumerable<T> {
-    if(this.isDisposed) {
+    if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if(!isFunction(callback)) {
-      throw new TypeError('Callback must be a function');
     }
 
-    const source = this.getGenerator();
-
-    function* generator(): Generator<T> {
-      let index = 0;
-      for (const value of source) {
-        if (callback(value, index++)) {
-          yield value;
-        };
-      };    
-    };
-
-    return new Enumerable<T>(generator());
-  };
-
-  public select<TResult>(callback: (value: T, index: number) => TResult): Enumerable<TResult> {
-    if(this.isDisposed) {
-      throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if(!isFunction(callback)) {
-      throw new TypeError('Callback must be a function');
-    }
-    
-    const source = this.getGenerator();
-
-    function* generator(): Generator<TResult> {
-      let index = 0;
-      for (const item of source) {
-        yield callback(item, index++);
-      };
-    };
-
-    return new Enumerable<TResult>(generator());
-  };
-
-  public take(count: number): Enumerable<T> {
-    if(this.isDisposed) {
-      throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if (!Number.isSafeInteger(count)) {
-      throw new RangeError(`Arguments must be safe integers`);
-    }
-
-    const source = this.getGenerator();
-
-    function* generator(): Generator<T> {
-      let taken = 0;
-      
-      for (const item of source) {
-        if (taken++ < count) {
-          yield item;
-        } else {
-          break;
-        }
-      }
-    }
-
-    return new Enumerable<T>(generator());
+    return whereFunction<T>(this.getGenerator(), callback);
   }
 
-  public takeWhile(callback: (value: T, index: number) => boolean): Enumerable<T> {
-    if(this.isDisposed) {
+  public select<R>(
+    callback: (value: T, index: number) => R
+  ): Enumerable<R> {
+    if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if(!isFunction(callback)) {
-      throw new TypeError('Callback must be a function');
     }
 
-    const source = this.getGenerator();
+    return selectFunction<T, R>(this.getGenerator(), callback);
+  }
 
-    function* generator(): Generator<T> {
-      let index = 0;
-
-      for (const item of source) {
-        if (callback(item, index++)) {
-          yield item;
-        } else {
-          break;
-        }
-      }
+  public take(count: number): Enumerable<T> {
+    if (this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
     }
 
-    return new Enumerable(generator())
+    return takeFunction<T>(this.getGenerator(), count);
+  }
+
+  public takeWhile(
+    callback: (value: T, index: number) => boolean
+  ): Enumerable<T> {
+    if (this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
+    }
+
+    return takeWhileFunction<T>(this.getGenerator(), callback);
   }
 
   public skip(count: number): Enumerable<T> {
-    if(this.isDisposed) {
+    if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if (!Number.isSafeInteger(count)) {
-      throw new RangeError(`Arguments must be safe integers`);
     }
 
-    const source = this.getGenerator();
-    
-    function* generator(): Generator<T> {
-      let skipped = 0;
-
-      for (const item of source) {
-        if (skipped++ < count) {
-          continue;
-        }
-        yield item;
-      }
-    }
-    
-    return new Enumerable<T>(generator());
+    return skipFuntion<T>(this.getGenerator(), count)
   }
 
-  public skipWhile(callback: (value: T, index: number) => boolean): Enumerable<T> {
-    if(this.isDisposed) {
-      throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if(!isFunction(callback)) {
-      throw new TypeError('Callback must be a function');
-    }
-
-    const source = this.getGenerator();
-
-    function* generator(): Generator<T> {
-      let index = 0;
-      let skipping = true;
-
-      for (const item of source) {
-        if (skipping) {
-          if (!callback(item, index++)) {
-            skipping = false;
-            yield item;
-          }
-        } else {
-          yield item;
-        }
-      }
-    }
-
-    return new Enumerable(generator())
-  }
-
-  public slice(
-    start: number, 
-    end?: number | undefined
+  public skipWhile(
+    callback: (value: T, index: number) => boolean
   ): Enumerable<T> {
-    if(this.isDisposed) {
+    if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if (!Number.isSafeInteger(start)) {
-      throw new RangeError(`Arguments must be safe integers`);
     }
 
-    const source = this.getGenerator();
+    return skipWhileFunction<T>(this.getGenerator(), callback)
+  }
 
-    function* generator(): Generator<T> {
-      let index = 0;
-      
-      for (const item of source) {
-        if (index < start) {
-          index++;
-          continue;
-        }
-        
-        if(end !== undefined && end !== null && Number.isSafeInteger(end)) {
-          if (index >= end) {
-            break;
-          }
-        }
-        
-        index++;
-
-        yield item;
-      }
+  public slice(start: number, end?: number | undefined): Enumerable<T> {
+    if (this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
     }
 
-    return new Enumerable<T>(generator())
+    return sliceFunction<T>(this.getGenerator(), start, end);
   }
 
   public static range(start: number, count: number): Enumerable<number> {
-    if (!Number.isSafeInteger(start) || !Number.isSafeInteger(count)) {
-      throw new RangeError(`Arguments must be safe integers`);
-    }
-
-    if (count < 0) {
-      throw new RangeError(`Count must be non-negative. Received ${count}`);
-    }
-
-    if (start < INT32_MIN || start > INT32_MAX) {
-      throw new RangeError(`Start must be between ${INT32_MIN} and ${INT32_MAX}`);
-    }
-
-    if (count > INT32_MAX) {
-      throw new RangeError(`Count must be at most ${INT32_MAX}`);
-    }
-
-    if (count > 0) {
-      const last = start + (count - 1);
-
-      if (last > INT32_MAX) {
-        throw new RangeError(`The range exceeds Int32.MaxValue. start + count - 1 = ${last}`);
-      }
-      
-      if (last < INT32_MIN) {
-        throw new RangeError(`The range goes below Int32.MinValue. start + count - 1 = ${last}`);
-      }
-    }
-
-    function* generator(): Generator<number> {
-      for (let i = 0; i < count; i++) {
-        yield start + i;
-      }
-    }
-
-    return new Enumerable<number>(generator());
-  };
+    return rangeFunction(start, count);
+  }
 
   public toArray(): T[] {
-    if(this.isDisposed) {
+    if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
-    return Array.from(this.iterator);
-  };
+    }
+    return Array.from<T>(this.getGenerator());
+  }
 
   public toDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T> {
-    if(this.isDisposed) {
+    if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
-    };
-
-    if(keySelector && !isFunction(keySelector)) {
-      throw new TypeError('Callback must be a function');
     }
 
-    const source = this.getGenerator();
-    return new Dictionary(source, keySelector);
-  };
+    if (keySelector && !isFunction(keySelector)) {
+      throw new TypeError("Callback must be a function");
+    }
+
+    return new Dictionary<T>(this.getGenerator(), keySelector);
+  }
 }

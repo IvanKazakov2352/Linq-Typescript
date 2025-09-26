@@ -5,7 +5,7 @@ export type TObjectKey = string | symbol | number
 
 export interface IEnumerable<T> {
   where: (callback: (value: T, index: number) => boolean) => Enumerable<T>;
-  select: <TResult>(callback: (value: T, index: number) => TResult) => Enumerable<TResult>;
+  select: <R>(callback: (value: T, index: number) => R) => Enumerable<R>;
   take(count: number): Enumerable<T>;
   takeWhile(callback: (value: T, index: number) => boolean): Enumerable<T>;
   skip(count: number): Enumerable<T>;

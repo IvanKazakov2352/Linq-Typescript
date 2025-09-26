@@ -1,0 +1,9 @@
+export { takeFunction } from "./take";
+export { takeWhileFunction } from "./takeWhile";
+export { rangeFunction } from "./range"
+export { anyFunction } from "./any";
+export { whereFunction } from "./where"
+export { selectFunction } from "./select";
+export { sliceFunction } from "./slice";
+export { skipFuntion } from "./skip";
+export { skipWhileFunction } from "./skipWhile";
