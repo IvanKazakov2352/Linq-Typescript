@@ -6,10 +6,15 @@ describe("Any", () => {
     const result = query.any();
     expect(result).toBe(true);
   });
-  it("Any on empty sequence without predicate", () => {
+  it("Any on empty array", () => {
     const query = new Enumerable([])
     const result = query.any();
     expect(result).toBe(false);
+  });
+  it("Any on one element in the array", () => {
+    const query = new Enumerable([{ age: 18, name: "John" }])
+    const result = query.any();
+    expect(result).toBe(true);
   });
   it("Any with predicate that returns true", () => {
     const query = Enumerable.range(1, 10);
