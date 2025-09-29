@@ -1,7 +1,7 @@
 import { Enumerable } from "../enumerable";
 
-export function skipFuntion<T>(
-  source: Generator<T, any, any>,
+export function skip<T>(
+  source: Generator<T>,
   count: number
 ): Enumerable<T> {
   if (!Number.isSafeInteger(count)) {

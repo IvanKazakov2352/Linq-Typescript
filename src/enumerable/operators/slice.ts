@@ -1,14 +1,14 @@
 import { Enumerable } from "../enumerable";
 
-export function sliceFunction<T>(
-  source: Generator<T, any, any>,
+export function slice<T>(
+  source: Generator<T>,
   start: number,
   end?: number | undefined
 ): Enumerable<T> {
   if (!Number.isSafeInteger(start)) {
     throw new RangeError(`Arguments must be safe integers`);
   }
-  
+
   function* generator(): Generator<T> {
     let index = 0;
 

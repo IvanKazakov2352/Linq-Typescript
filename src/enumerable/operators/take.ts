@@ -1,13 +1,13 @@
 import { Enumerable } from "../enumerable";
 
-export function takeFunction<T>(
-  source: Generator<T, any, any>,
+export function take<T>(
+  source: Generator<T>,
   count: number
 ): Enumerable<T> {
   if (!Number.isSafeInteger(count)) {
     throw new RangeError(`Arguments must be safe integers`);
   }
-  
+
   function* generator(): Generator<T> {
     let taken = 0;
 

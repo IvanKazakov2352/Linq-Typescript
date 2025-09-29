@@ -1,8 +1,8 @@
 import { isFunction } from "../../utils/utils";
 import { Enumerable } from "../enumerable";
 
-export function skipWhileFunction<T>(
-  source: Generator<T, any, any>,
+export function skipWhile<T>(
+  source: Generator<T>,
   callback: (value: T, index: number) => boolean
 ): Enumerable<T> {
   if (!isFunction(callback)) {

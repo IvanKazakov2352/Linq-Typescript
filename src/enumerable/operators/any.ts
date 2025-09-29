@@ -1,7 +1,7 @@
 import { isFunction } from "../../utils/utils";
 
-export function anyFunction<T>(
-  source: Generator<T, any, any>,
+export function any<T>(
+  source: Generator<T>,
   callback?: (item: T, index: number) => boolean
 ) {
   if (callback && !isFunction(callback)) {

@@ -1,4 +1,4 @@
-export function isIterable<T>(iterator: Iterable<T>) {
+export function isIterable<T>(iterator: Iterable<T>): iterator is Iterable<T> {
   return iterator !== null && typeof iterator[Symbol.iterator] === "function";
 }
 

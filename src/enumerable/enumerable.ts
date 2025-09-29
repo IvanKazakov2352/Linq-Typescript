@@ -2,15 +2,16 @@ import { Dictionary } from "../dictionary/dictionary";
 import { IEnumerable, TObjectKey } from "../types/types";
 import { isFunction, isIterable } from "../utils/utils";
 import {
-  anyFunction,
-  rangeFunction,
-  selectFunction,
-  skipFuntion,
-  skipWhileFunction,
-  sliceFunction,
-  takeFunction,
-  takeWhileFunction,
-  whereFunction,
+  any,
+  elementAt,
+  range,
+  select,
+  skip,
+  skipWhile,
+  slice,
+  take,
+  takeWhile,
+  where,
 } from "./operators";
 
 export class Enumerable<T> implements IEnumerable<T> {
@@ -32,7 +33,6 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
     return this.iterator[Symbol.iterator]();
   }
 
@@ -55,16 +55,14 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
-    return anyFunction<T>(this.getGenerator(), callback);
+    return any<T>(this.getGenerator(), callback);
   }
 
   public where(callback: (value: T, index: number) => boolean): Enumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
-    return whereFunction<T>(this.getGenerator(), callback);
+    return where<T>(this.getGenerator(), callback);
   }
 
   public select<R>(
@@ -73,16 +71,14 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
-    return selectFunction<T, R>(this.getGenerator(), callback);
+    return select<T, R>(this.getGenerator(), callback);
   }
 
   public take(count: number): Enumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
-    return takeFunction<T>(this.getGenerator(), count);
+    return take<T>(this.getGenerator(), count);
   }
 
   public takeWhile(
@@ -91,16 +87,14 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
-    return takeWhileFunction<T>(this.getGenerator(), callback);
+    return takeWhile<T>(this.getGenerator(), callback);
   }
 
   public skip(count: number): Enumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
-    return skipFuntion<T>(this.getGenerator(), count)
+    return skip<T>(this.getGenerator(), count)
   }
 
   public skipWhile(
@@ -109,20 +103,25 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
-    return skipWhileFunction<T>(this.getGenerator(), callback)
+    return skipWhile<T>(this.getGenerator(), callback)
   }
 
   public slice(start: number, end?: number | undefined): Enumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
-
-    return sliceFunction<T>(this.getGenerator(), start, end);
+    return slice<T>(this.getGenerator(), start, end);
   }
 
   public static range(start: number, count: number): Enumerable<number> {
-    return rangeFunction(start, count);
+    return range(start, count);
+  }
+
+  public elementAt(index: number): T {
+    if (this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
+    }
+    return elementAt(this.getGenerator(), index)
   }
 
   public toArray(): T[] {
@@ -140,7 +139,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (keySelector && !isFunction(keySelector)) {
       throw new TypeError("Callback must be a function");
     }
-
+    
     return new Dictionary<T>(this.getGenerator(), keySelector);
   }
 }

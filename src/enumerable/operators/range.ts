@@ -1,7 +1,7 @@
 import { INT32_MAX, INT32_MIN } from "../../utils/constants";
 import { Enumerable } from "../enumerable";
 
-export function rangeFunction(
+export function range(
   start: number,
   count: number
 ): Enumerable<number> {

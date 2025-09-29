@@ -1,8 +1,8 @@
 import { isFunction } from "../../utils/utils";
 import { Enumerable } from "../enumerable";
 
-export function selectFunction<T, R>(
-  source: Generator<T, any, any>,
+export function select<T, R>(
+  source: Generator<T>,
   callback: (value: T, index: number) => R
 ): Enumerable<R> {
   if (!isFunction(callback)) {
