@@ -6,7 +6,7 @@ export function slice<T>(
   end?: number | undefined
 ): Enumerable<T> {
   if (!Number.isSafeInteger(start)) {
-    throw new RangeError(`Arguments must be safe integers`);
+    throw new RangeError("Arguments must be safe integers");
   }
 
   function* generator(): Generator<T> {

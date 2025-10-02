@@ -5,7 +5,7 @@ export function take<T>(
   count: number
 ): Enumerable<T> {
   if (!Number.isSafeInteger(count)) {
-    throw new RangeError(`Arguments must be safe integers`);
+    throw new RangeError("Arguments must be safe integers");
   }
 
   function* generator(): Generator<T> {

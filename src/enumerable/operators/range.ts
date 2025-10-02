@@ -6,7 +6,7 @@ export function range(
   count: number
 ): Enumerable<number> {
   if (!Number.isSafeInteger(start) || !Number.isSafeInteger(count)) {
-    throw new RangeError(`Arguments must be safe integers`);
+    throw new RangeError("Arguments must be safe integers");
   }
 
   if (count < 0) {

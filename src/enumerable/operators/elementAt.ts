@@ -10,10 +10,9 @@ export function elementAt<T>(source: Generator<T>, index: number): T {
   let currentIndex: number = 0;
 
   for (const item of source) {
-    if (currentIndex === index) {
+    if (currentIndex++ === index) {
       return item;
     }
-    currentIndex++;
   }
 
   throw new RangeError(`Index ${index} out of range`);

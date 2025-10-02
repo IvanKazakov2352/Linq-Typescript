@@ -74,4 +74,8 @@ describe("Any", () => {
     expect(hasAWord).toBe(true)
     expect(hasBcWord).toBe(false)
   });
+  it('Callback argument error', () => {
+    expect(() => new Enumerable([1, 2]).any(123123123 as any)).toThrow('Callback must be a function')
+    expect(() => new Enumerable([1, 2]).any((i) => i === 2)).not.toThrow('Callback must be a function')
+  })
 });

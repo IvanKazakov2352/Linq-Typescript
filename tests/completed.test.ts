@@ -1,0 +1,30 @@
+import { Enumerable } from "../src/enumerable/enumerable"
+
+describe("IsCompleted", () => {
+  it("Testing the IsCompleted function in toArray", () => {
+    const query = new Enumerable([1, 2, 3, 4, 5])
+    query.toArray()
+    expect(() => query.any()).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.elementAt(1)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.select((v) => v * 2)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.skip(2)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.skipWhile((v) => v === 2)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.slice(1, 2)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.take(3)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.takeWhile((v) => v === 1)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.where(v => v === 1)).toThrow("Cannot iterate over an already completed sequence")
+  })
+  it("Testing the IsCompleted function in toDictionary", () => {
+    const query = new Enumerable([1, 2, 3, 4, 5])
+    query.toDictionary()
+    expect(() => query.any()).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.elementAt(1)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.select((v) => v * 2)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.skip(2)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.skipWhile((v) => v === 2)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.slice(1, 2)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.take(3)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.takeWhile((v) => v === 1)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.where(v => v === 1)).toThrow("Cannot iterate over an already completed sequence")
+  })
+})

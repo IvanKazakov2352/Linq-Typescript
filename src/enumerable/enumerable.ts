@@ -24,6 +24,7 @@ export class Enumerable<T> implements IEnumerable<T> {
 
   private iterator: Iterable<T>;
   private isDisposed: boolean = false;
+  private isCompleted: boolean = false;
 
   public [Symbol.dispose]() {
     this.dispose();
@@ -43,6 +44,7 @@ export class Enumerable<T> implements IEnumerable<T> {
 
     this.iterator = [] as Iterable<T>;
     this.isDisposed = true;
+    this.isCompleted = true;
   }
 
   private *getGenerator(): Generator<T> {
@@ -55,12 +57,18 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
+    }
     return any<T>(this.getGenerator(), callback);
   }
 
   public where(callback: (value: T, index: number) => boolean): Enumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
+    }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
     }
     return where<T>(this.getGenerator(), callback);
   }
@@ -71,12 +79,18 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
+    }
     return select<T, R>(this.getGenerator(), callback);
   }
 
   public take(count: number): Enumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
+    }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
     }
     return take<T>(this.getGenerator(), count);
   }
@@ -87,6 +101,9 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
+    }
     return takeWhile<T>(this.getGenerator(), callback);
   }
 
@@ -94,14 +111,18 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
+    }
     return skip<T>(this.getGenerator(), count)
   }
 
-  public skipWhile(
-    callback: (value: T, index: number) => boolean
-  ): Enumerable<T> {
+  public skipWhile(callback: (value: T, index: number) => boolean): Enumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
+    }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
     }
     return skipWhile<T>(this.getGenerator(), callback)
   }
@@ -109,6 +130,9 @@ export class Enumerable<T> implements IEnumerable<T> {
   public slice(start: number, end?: number | undefined): Enumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
+    }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
     }
     return slice<T>(this.getGenerator(), start, end);
   }
@@ -121,6 +145,9 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
+    }
     return elementAt(this.getGenerator(), index)
   }
 
@@ -128,6 +155,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
+    this.isCompleted = true
     return Array.from<T>(this.getGenerator());
   }
 
@@ -139,7 +167,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     if (keySelector && !isFunction(keySelector)) {
       throw new TypeError("Callback must be a function");
     }
-    
+    this.isCompleted = true
     return new Dictionary<T>(this.getGenerator(), keySelector);
   }
 }
