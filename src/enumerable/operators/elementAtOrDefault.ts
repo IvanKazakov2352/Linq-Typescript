@@ -1,4 +1,8 @@
-export function elementAt<TValue>(source: Generator<TValue>, index: number): TValue {
+export function elementAtOrDefault<TValue>(
+  source: Generator<TValue>, 
+  index: number, 
+  defaultValue?: TValue | undefined
+): TValue {
   if (!Number.isSafeInteger(index)) {
     throw new RangeError("Arguments must be safe integers");
   }
@@ -14,6 +18,9 @@ export function elementAt<TValue>(source: Generator<TValue>, index: number): TVa
       return item;
     }
   }
+
+  if(defaultValue !== undefined)
+    return defaultValue
 
   throw new RangeError(`Index ${index} out of range`);
 }

@@ -8,3 +8,4 @@ export { slice } from "./slice";
 export { skip } from "./skip";
 export { skipWhile } from "./skipWhile";
 export { elementAt } from "./elementAt";
+export { elementAtOrDefault } from "./elementAtOrDefault";

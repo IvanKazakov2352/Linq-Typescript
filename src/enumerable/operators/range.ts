@@ -37,11 +37,13 @@ export function range(
     }
   }
 
-  function* generator(): Generator<number> {
-    for (let i = 0; i < count; i++) {
-      yield start + i;
+  const iterable: Iterable<number> = {
+    [Symbol.iterator]: function* () {
+      for (let i = 0; i < count; i++) {
+        yield start + i;
+      }
     }
-  }
+  };
 
-  return new Enumerable<number>(generator());
+  return new Enumerable<number>(iterable);
 }

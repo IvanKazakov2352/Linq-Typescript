@@ -1,8 +1,8 @@
 import { isFunction } from "../../utils/utils";
 
-export function any<T>(
-  source: Generator<T>,
-  callback?: (item: T, index: number) => boolean
+export function any<TValue>(
+  source: Generator<TValue>,
+  callback?: (item: TValue, index: number) => boolean
 ) {
   if (callback && !isFunction(callback)) {
     throw new TypeError("Callback must be a function");

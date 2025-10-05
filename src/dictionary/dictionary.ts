@@ -4,21 +4,21 @@ import { isFunction } from "../utils/utils";
 export class Dictionary<T> implements IDictionary<T> {
   private dictionary: Record<TObjectKey, T> = {};
   private index = 0;
-  private keySelector: (item: T) => TObjectKey;
+  private selector: (item: T) => TObjectKey;
   private isDisposed: boolean = false;
   
   constructor(
-    source: Generator<T, any, any>,
-    keySelector?: (item: T) => TObjectKey
+    source: Generator<T>,
+    selector?: (item: T) => TObjectKey
   ) {
-    if(keySelector && !isFunction(keySelector)) {
+    if(selector && !isFunction(selector)) {
       throw new TypeError('Callback must be a function');
     }
     
-    this.keySelector = keySelector ?? ((item: T) => this.index)
+    this.selector = selector ?? ((_: T) => this.index)
 
     for (const item of source) {
-      const key = this.keySelector(item)
+      const key = this.selector(item)
       this.dictionary[key] = item;
       this.index++;
     }
@@ -28,7 +28,7 @@ export class Dictionary<T> implements IDictionary<T> {
     this.dispose()
   }
 
-  private getGenerator(): Generator<T> {
+  private getSource(): Generator<T> {
     const dictionary = this.getDictionary()
     
     function* source() {
@@ -46,7 +46,7 @@ export class Dictionary<T> implements IDictionary<T> {
     };
 
     let count: number = 0;
-    const source = this.getGenerator()
+    const source = this.getSource()
 
     for (const _ of source) {
       count++
@@ -81,8 +81,7 @@ export class Dictionary<T> implements IDictionary<T> {
       throw new Error('Dictionary search key not specified')
     }
     
-    const dictionary = this.getDictionary()
-    return Object.prototype.hasOwnProperty.call(dictionary, key);
+    return Object.prototype.hasOwnProperty.call(this.getDictionary(), key);
   }
 
   public clear(): Dictionary<T> {
@@ -92,8 +91,7 @@ export class Dictionary<T> implements IDictionary<T> {
 
     this.dictionary = {}
     this.index = 0
-    const source = this.getGenerator()
-    return new Dictionary(source, this.keySelector)
+    return new Dictionary(this.getSource(), this.selector)
   }
 
   public add(key: TObjectKey, value: T): Dictionary<T> {
@@ -107,8 +105,7 @@ export class Dictionary<T> implements IDictionary<T> {
 
     this.dictionary[key] = value
     this.index++
-    const source = this.getGenerator()
-    return new Dictionary(source, this.keySelector)
+    return new Dictionary(this.getSource(), this.selector)
   }
 
   public delete(key: TObjectKey): Dictionary<T> {
@@ -122,8 +119,7 @@ export class Dictionary<T> implements IDictionary<T> {
 
     delete this.dictionary[key]
     this.index--
-    const source = this.getGenerator()
-    return new Dictionary(source, this.keySelector)
+    return new Dictionary(this.getSource(), this.selector)
   }
 
   public get(key: TObjectKey): T | null {

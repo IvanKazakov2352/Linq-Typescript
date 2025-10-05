@@ -4,6 +4,7 @@ import { isFunction, isIterable } from "../utils/utils";
 import {
   any,
   elementAt,
+  elementAtOrDefault,
   range,
   select,
   skip,
@@ -14,15 +15,15 @@ import {
   where,
 } from "./operators";
 
-export class Enumerable<T> implements IEnumerable<T> {
-  constructor(iterator: Iterable<T>) {
-    if (iterator === undefined || !isIterable<T>(iterator)) {
+export class Enumerable<TValue> implements IEnumerable<TValue> {
+  constructor(iterator: Iterable<TValue>) {
+    if (iterator === undefined || !isIterable<TValue>(iterator)) {
       throw new Error("The iterator object cannot be empty");
     }
     this.iterator = iterator;
   }
 
-  private iterator: Iterable<T>;
+  private iterator: Iterable<TValue>;
   private isDisposed: boolean = false;
   private isCompleted: boolean = false;
 
@@ -30,7 +31,7 @@ export class Enumerable<T> implements IEnumerable<T> {
     this.dispose();
   }
 
-  public [Symbol.iterator](): Iterator<T> {
+  public [Symbol.iterator](): Iterator<TValue> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
@@ -42,124 +43,134 @@ export class Enumerable<T> implements IEnumerable<T> {
       throw new Error("Cannot iterate over a disposed object");
     }
 
-    this.iterator = [] as Iterable<T>;
+    this.iterator = [] as Iterable<TValue>;
     this.isDisposed = true;
     this.isCompleted = true;
   }
 
-  private *getGenerator(): Generator<T> {
+  private *getSource(): Generator<TValue> {
     for (const item of this.iterator) {
       yield item;
     }
   }
 
-  public any(callback?: (item: T, index: number) => boolean): boolean {
+  public any(callback?: (item: TValue, index: number) => boolean): boolean {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return any<T>(this.getGenerator(), callback);
+    return any<TValue>(this.getSource(), callback);
   }
 
-  public where(callback: (value: T, index: number) => boolean): Enumerable<T> {
+  public where(callback: (value: TValue, index: number) => boolean): Enumerable<TValue> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return where<T>(this.getGenerator(), callback);
+    return where<TValue>(this.getSource(), callback);
   }
 
-  public select<R>(
-    callback: (value: T, index: number) => R
-  ): Enumerable<R> {
+  public select<TResult>(
+    callback: (value: TValue, index: number) => TResult
+  ): Enumerable<TResult> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return select<T, R>(this.getGenerator(), callback);
+    return select<TValue, TResult>(this.getSource(), callback);
   }
 
-  public take(count: number): Enumerable<T> {
+  public take(count: number): Enumerable<TValue> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return take<T>(this.getGenerator(), count);
+    return take<TValue>(this.getSource(), count);
   }
 
   public takeWhile(
-    callback: (value: T, index: number) => boolean
-  ): Enumerable<T> {
+    callback: (value: TValue, index: number) => boolean
+  ): Enumerable<TValue> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return takeWhile<T>(this.getGenerator(), callback);
+    return takeWhile<TValue>(this.getSource(), callback);
   }
 
-  public skip(count: number): Enumerable<T> {
+  public skip(count: number): Enumerable<TValue> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return skip<T>(this.getGenerator(), count)
+    return skip<TValue>(this.getSource(), count)
   }
 
-  public skipWhile(callback: (value: T, index: number) => boolean): Enumerable<T> {
+  public skipWhile(callback: (value: TValue, index: number) => boolean): Enumerable<TValue> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return skipWhile<T>(this.getGenerator(), callback)
+    return skipWhile<TValue>(this.getSource(), callback)
   }
 
-  public slice(start: number, end?: number | undefined): Enumerable<T> {
+  public slice(start: number, end?: number | undefined): Enumerable<TValue> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return slice<T>(this.getGenerator(), start, end);
+    return slice<TValue>(this.getSource(), start, end);
   }
 
   public static range(start: number, count: number): Enumerable<number> {
     return range(start, count);
   }
 
-  public elementAt(index: number): T {
+  public elementAt(index: number): TValue {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     if(this.isCompleted) {
       throw new Error("Cannot iterate over an already completed sequence");
     }
-    return elementAt(this.getGenerator(), index)
+    return elementAt<TValue>(this.getSource(), index)
   }
 
-  public toArray(): T[] {
+  public elementAtOrDefault(index: number, defaultValue?: TValue): TValue {
+    if (this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
+    }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
+    }
+    return elementAtOrDefault<TValue>(this.getSource(), index, defaultValue)
+  }
+
+  public toArray(): TValue[] {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
     this.isCompleted = true
-    return Array.from<T>(this.getGenerator());
+    return Array.from<TValue>(this.iterator);
   }
 
-  public toDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T> {
+  public toDictionary(keySelector?: (item: TValue) => TObjectKey): Dictionary<TValue> {
     if (this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     }
@@ -168,6 +179,6 @@ export class Enumerable<T> implements IEnumerable<T> {
       throw new TypeError("Callback must be a function");
     }
     this.isCompleted = true
-    return new Dictionary<T>(this.getGenerator(), keySelector);
+    return new Dictionary<TValue>(this.getSource(), keySelector);
   }
 }

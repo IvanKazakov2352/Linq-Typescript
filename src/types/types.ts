@@ -16,6 +16,7 @@ export interface IEnumerable<T> {
   toDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T>;
   any(callback?: (item: T, index: number) => boolean): boolean;
   elementAt(index: number): T;
+  elementAtOrDefault(index: number, defaultValue?: T): T;
 }
 
 export interface IDictionary<T> {

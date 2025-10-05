@@ -1,15 +1,15 @@
 import { Enumerable } from "../enumerable";
 
-export function slice<T>(
-  source: Generator<T>,
+export function slice<TValue>(
+  source: Generator<TValue>,
   start: number,
   end?: number | undefined
-): Enumerable<T> {
+): Enumerable<TValue> {
   if (!Number.isSafeInteger(start)) {
     throw new RangeError("Arguments must be safe integers");
   }
 
-  function* generator(): Generator<T> {
+  function* generator(): Generator<TValue> {
     let index = 0;
 
     for (const item of source) {
@@ -30,5 +30,5 @@ export function slice<T>(
     }
   }
 
-  return new Enumerable<T>(generator());
+  return new Enumerable<TValue>(generator());
 }

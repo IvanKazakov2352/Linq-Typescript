@@ -1,16 +1,12 @@
 import { Enumerable } from "../src/enumerable/enumerable"
+import { User } from "./mock-data";
 
 describe("ElementAt", () => {
   it("ElementAt with object properties", () => {
-    interface Person {
-      name: string;
-      age: number;
-    }
-
-    const people: Person[] = [
-      { name: "Alice", age: 25 },
-      { name: "Bob", age: 30 },
-      { name: "Charlie", age: 35 }
+    const people: User[] = [
+      { name: "Alice", age: 25, id: 1 },
+      { name: "Bob", age: 30, id: 2 },
+      { name: "Charlie", age: 35, id: 3 }
     ];
 
     using query = new Enumerable(people)

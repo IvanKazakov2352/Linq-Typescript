@@ -13,6 +13,7 @@ describe("IsCompleted", () => {
     expect(() => query.take(3)).toThrow("Cannot iterate over an already completed sequence")
     expect(() => query.takeWhile((v) => v === 1)).toThrow("Cannot iterate over an already completed sequence")
     expect(() => query.where(v => v === 1)).toThrow("Cannot iterate over an already completed sequence")
+    expect(() => query.elementAtOrDefault(1, 123123123)).toThrow("Cannot iterate over an already completed sequence")
   })
   it("Testing the IsCompleted function in toDictionary", () => {
     const query = new Enumerable([1, 2, 3, 4, 5])

@@ -1,14 +1,14 @@
 import { Enumerable } from "../enumerable";
 
-export function skip<T>(
-  source: Generator<T>,
+export function skip<TValue>(
+  source: Generator<TValue>,
   count: number
-): Enumerable<T> {
+): Enumerable<TValue> {
   if (!Number.isSafeInteger(count)) {
     throw new RangeError("Arguments must be safe integers");
   }
   
-  function* generator(): Generator<T> {
+  function* generator(): Generator<TValue> {
     let skipped = 0;
 
     for (const item of source) {
@@ -19,5 +19,5 @@ export function skip<T>(
     }
   }
 
-  return new Enumerable<T>(generator());
+  return new Enumerable<TValue>(generator());
 }
