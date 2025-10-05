@@ -3,6 +3,7 @@ import { IEnumerable, TObjectKey } from "../types/types";
 import { isFunction, isIterable } from "../utils/utils";
 import {
   any,
+  buffer,
   elementAt,
   elementAtOrDefault,
   range,
@@ -160,6 +161,16 @@ export class Enumerable<TValue> implements IEnumerable<TValue> {
       throw new Error("Cannot iterate over an already completed sequence");
     }
     return elementAtOrDefault<TValue>(this.getSource(), index, defaultValue)
+  }
+
+  public buffer(chunkSize: number): Enumerable<TValue[]> {
+    if (this.isDisposed) {
+      throw new Error("Cannot iterate over a disposed object");
+    }
+    if(this.isCompleted) {
+      throw new Error("Cannot iterate over an already completed sequence");
+    }
+    return buffer(this.getSource(), chunkSize)
   }
 
   public toArray(): TValue[] {

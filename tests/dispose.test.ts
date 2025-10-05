@@ -21,6 +21,7 @@ describe("Dispose", () => {
     expect(() => query.take(1)).toThrow(errorText)
     expect(() => query.elementAt(1)).toThrow(errorText)
     expect(() => query.elementAtOrDefault(1, 1111)).toThrow(errorText)
+    expect(() => query.buffer(15)).toThrow(errorText)
 
     const dict = new Enumerable([1, 2, 3, 4, 5, 6])
       .toDictionary()

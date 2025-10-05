@@ -3,29 +3,30 @@ import { Enumerable } from "../enumerable/enumerable";
 
 export type TObjectKey = string | symbol | number
 
-export interface IEnumerable<T> {
-  where: (callback: (value: T, index: number) => boolean) => Enumerable<T>;
-  select: <R>(callback: (value: T, index: number) => R) => Enumerable<R>;
-  take(count: number): Enumerable<T>;
-  takeWhile(callback: (value: T, index: number) => boolean): Enumerable<T>;
-  skip(count: number): Enumerable<T>;
-  skipWhile(callback: (value: T, index: number) => boolean): Enumerable<T>;
-  slice(start: number, end?: number | undefined): Enumerable<T>;
+export interface IEnumerable<TValue> {
+  where: (callback: (value: TValue, index: number) => boolean) => Enumerable<TValue>;
+  select: <R>(callback: (value: TValue, index: number) => R) => Enumerable<R>;
+  take(count: number): Enumerable<TValue>;
+  takeWhile(callback: (value: TValue, index: number) => boolean): Enumerable<TValue>;
+  skip(count: number): Enumerable<TValue>;
+  skipWhile(callback: (value: TValue, index: number) => boolean): Enumerable<TValue>;
+  slice(start: number, end?: number | undefined): Enumerable<TValue>;
   dispose: () => void;
-  toArray(): T[];
-  toDictionary(keySelector?: (item: T) => TObjectKey): Dictionary<T>;
-  any(callback?: (item: T, index: number) => boolean): boolean;
-  elementAt(index: number): T;
-  elementAtOrDefault(index: number, defaultValue?: T): T;
+  toArray(): TValue[];
+  toDictionary(keySelector?: (item: TValue) => TObjectKey): Dictionary<TValue>;
+  any(callback?: (item: TValue, index: number) => boolean): boolean;
+  elementAt(index: number): TValue;
+  elementAtOrDefault(index: number, defaultValue?: TValue): TValue;
+  buffer(chunkSize: number): Enumerable<TValue[]>;
 }
 
-export interface IDictionary<T> {
+export interface IDictionary<TValue> {
   size: number;
-  getDictionary(): Record<TObjectKey, T>;
+  getDictionary(): Record<TObjectKey, TValue>;
   has(key: TObjectKey): boolean;
-  clear(): Dictionary<T>;
-  add(key: TObjectKey, value: T): Dictionary<T>;
-  delete(key: TObjectKey): Dictionary<T>;
-  get(key: TObjectKey): T | null;
+  clear(): Dictionary<TValue>;
+  add(key: TObjectKey, value: TValue): Dictionary<TValue>;
+  delete(key: TObjectKey): Dictionary<TValue>;
+  get(key: TObjectKey): TValue | null;
   dispose(): void;
 }

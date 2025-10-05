@@ -9,3 +9,4 @@ export { skip } from "./skip";
 export { skipWhile } from "./skipWhile";
 export { elementAt } from "./elementAt";
 export { elementAtOrDefault } from "./elementAtOrDefault";
+export { buffer } from "./buffer";

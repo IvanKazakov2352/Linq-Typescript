@@ -1,21 +1,21 @@
 import { IDictionary, TObjectKey } from "../types/types";
 import { isFunction } from "../utils/utils";
 
-export class Dictionary<T> implements IDictionary<T> {
-  private dictionary: Record<TObjectKey, T> = {};
+export class Dictionary<TValue> implements IDictionary<TValue> {
+  private dictionary: Record<TObjectKey, TValue> = {};
   private index = 0;
-  private selector: (item: T) => TObjectKey;
+  private selector: (item: TValue) => TObjectKey;
   private isDisposed: boolean = false;
   
   constructor(
-    source: Generator<T>,
-    selector?: (item: T) => TObjectKey
+    source: Generator<TValue>,
+    selector?: (item: TValue) => TObjectKey
   ) {
     if(selector && !isFunction(selector)) {
       throw new TypeError('Callback must be a function');
     }
     
-    this.selector = selector ?? ((_: T) => this.index)
+    this.selector = selector ?? ((_: TValue) => this.index)
 
     for (const item of source) {
       const key = this.selector(item)
@@ -28,7 +28,7 @@ export class Dictionary<T> implements IDictionary<T> {
     this.dispose()
   }
 
-  private getSource(): Generator<T> {
+  private getSource(): Generator<TValue> {
     const dictionary = this.getDictionary()
     
     function* source() {
@@ -65,7 +65,7 @@ export class Dictionary<T> implements IDictionary<T> {
     this.isDisposed = true
   }
 
-  public getDictionary(): Record<TObjectKey, T> {
+  public getDictionary(): Record<TObjectKey, TValue> {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     };
@@ -84,7 +84,7 @@ export class Dictionary<T> implements IDictionary<T> {
     return Object.prototype.hasOwnProperty.call(this.getDictionary(), key);
   }
 
-  public clear(): Dictionary<T> {
+  public clear(): Dictionary<TValue> {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     };
@@ -94,7 +94,7 @@ export class Dictionary<T> implements IDictionary<T> {
     return new Dictionary(this.getSource(), this.selector)
   }
 
-  public add(key: TObjectKey, value: T): Dictionary<T> {
+  public add(key: TObjectKey, value: TValue): Dictionary<TValue> {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     };
@@ -108,7 +108,7 @@ export class Dictionary<T> implements IDictionary<T> {
     return new Dictionary(this.getSource(), this.selector)
   }
 
-  public delete(key: TObjectKey): Dictionary<T> {
+  public delete(key: TObjectKey): Dictionary<TValue> {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     };
@@ -122,7 +122,7 @@ export class Dictionary<T> implements IDictionary<T> {
     return new Dictionary(this.getSource(), this.selector)
   }
 
-  public get(key: TObjectKey): T | null {
+  public get(key: TObjectKey): TValue | null {
     if(this.isDisposed) {
       throw new Error("Cannot iterate over a disposed object");
     };
