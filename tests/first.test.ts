@@ -22,6 +22,12 @@ describe("First", () => {
     using query = Enumerable.range(1, 5);
     expect(() => query.first(x => x > 10)).toThrow("Sequence contains no elements");
   });
+  it("First empty Set and empty Map", () => {
+    using emptySet = new Enumerable(new Set<number>())
+    using emptyMap = new Enumerable(new Map<number, number>())
+    expect(() => emptySet.first()).toThrow("Sequence contains no elements");
+    expect(() => emptyMap.first()).toThrow("Sequence contains no elements");
+  });
   it("First with object properties", () => {
     const people: User[] = [
       { name: "Alice", age: 25, id: 1 },

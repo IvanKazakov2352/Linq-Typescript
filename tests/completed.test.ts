@@ -18,6 +18,7 @@ describe("IsCompleted", () => {
     expect(() => query.elementAtOrDefault(1, 123123123)).toThrow(errorText)
     expect(() => query.buffer(15)).toThrow(errorText)
     expect(() => query.first()).toThrow(errorText)
+    expect(() => query.firstOrDefault()).toThrow(errorText)
   })
   it("Testing the IsCompleted function in toDictionary", () => {
     const query = new Enumerable([1, 2, 3, 4, 5])
@@ -34,5 +35,6 @@ describe("IsCompleted", () => {
     expect(() => query.elementAtOrDefault(1, 123123123)).toThrow(errorText)
     expect(() => query.buffer(15)).toThrow(errorText)
     expect(() => query.first()).toThrow(errorText)
+    expect(() => query.firstOrDefault()).toThrow(errorText)
   })
 })

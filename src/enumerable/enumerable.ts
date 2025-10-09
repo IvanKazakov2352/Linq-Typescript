@@ -13,6 +13,7 @@ import {
   elementAt,
   elementAtOrDefault,
   first,
+  firstOrDefault,
   range,
   select,
   skip,
@@ -187,7 +188,20 @@ export class Enumerable<TValue> implements IEnumerable<TValue> {
     if(this.isCompleted) {
       throw new Error(COMPLETED_SEQUENCE);
     }
-    return first(this.getSource(),callback)
+    return first(this.getSource(), callback)
+  }
+
+  public firstOrDefault(
+    callback?: (value: TValue, index: number) => boolean, 
+    defaultValue?: TValue
+  ): TValue {
+    if (this.isDisposed) {
+      throw new Error(DISPOSED_OBJECT);
+    }
+    if(this.isCompleted) {
+      throw new Error(COMPLETED_SEQUENCE);
+    }
+    return firstOrDefault(this.getSource(), callback, defaultValue)
   }
 
   public toArray(): TValue[] {

@@ -11,3 +11,4 @@ export { elementAt } from "./elementAt";
 export { elementAtOrDefault } from "./elementAtOrDefault";
 export { buffer } from "./buffer";
 export { first } from "./first";
+export { firstOrDefault } from "./firstOrDefault";

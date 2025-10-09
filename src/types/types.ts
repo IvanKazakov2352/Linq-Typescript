@@ -19,6 +19,10 @@ export interface IEnumerable<TValue> {
   buffer(chunkSize: number): Enumerable<TValue[]>;
   elementAtOrDefault(index: number, defaultValue?: TValue): TValue;
   first(callback?: (value: TValue, index: number) => boolean): TValue;
+  firstOrDefault(
+    callback?: (value: TValue, index: number) => boolean, 
+    defaultValue?: TValue
+  ): TValue;
 }
 
 export interface IDictionary<TValue> {
