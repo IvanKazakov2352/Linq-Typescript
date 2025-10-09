@@ -1,3 +1,4 @@
+import { NOT_SAFE_INTEGER } from "../../utils/constants";
 import { Enumerable } from "../enumerable";
 
 export function slice<TValue>(
@@ -6,7 +7,7 @@ export function slice<TValue>(
   end?: number | undefined
 ): Enumerable<TValue> {
   if (!Number.isSafeInteger(start)) {
-    throw new RangeError("Arguments must be safe integers");
+    throw new RangeError(NOT_SAFE_INTEGER);
   }
 
   function* generator(): Generator<TValue> {

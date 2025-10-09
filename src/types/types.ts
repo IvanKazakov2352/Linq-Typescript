@@ -16,8 +16,9 @@ export interface IEnumerable<TValue> {
   toDictionary(keySelector?: (item: TValue) => TObjectKey): Dictionary<TValue>;
   any(callback?: (item: TValue, index: number) => boolean): boolean;
   elementAt(index: number): TValue;
-  elementAtOrDefault(index: number, defaultValue?: TValue): TValue;
   buffer(chunkSize: number): Enumerable<TValue[]>;
+  elementAtOrDefault(index: number, defaultValue?: TValue): TValue;
+  first(callback?: (value: TValue, index: number) => boolean): TValue;
 }
 
 export interface IDictionary<TValue> {

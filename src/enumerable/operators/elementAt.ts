@@ -1,19 +1,26 @@
+import { INDEX_NON_NEGATIVE_INTEGER, NOT_SAFE_INTEGER } from "../../utils/constants";
+
 export function elementAt<TValue>(source: Generator<TValue>, index: number): TValue {
   if (!Number.isSafeInteger(index)) {
-    throw new RangeError("Arguments must be safe integers");
+    throw new RangeError(NOT_SAFE_INTEGER);
   }
 
   if(index < 0) {
-    throw new RangeError("Index must be a non-negative integer");
+    throw new RangeError(INDEX_NON_NEGATIVE_INTEGER);
   }
 
-  let current: number = 0;
-
-  for (const item of source) {
-    if (current++ === index) {
-      return item;
+  function* generator(): Generator<TValue> {
+    let current: number = 0;
+    for (const item of source) {
+      if (current++ === index) {
+        yield item;
+      }
     }
   }
-
-  throw new RangeError(`Index ${index} out of range`);
+  
+  const result = generator().next()
+  if(result.done) {
+    throw new RangeError(`Index ${index} out of range`);
+  }
+  return result.value
 }

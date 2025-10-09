@@ -34,7 +34,7 @@ export const getMockData = (count: number): IValue[] => {
     values.push({
       code: Math.floor(Math.random() * 600000),
       timeStamp: new Date().getTime(),
-      timeStamp2: new Date().getTime() + minute * i,
+      timeStamp2: new Date().getTime() - minute * i,
       value: i += i << 2
     })
   }

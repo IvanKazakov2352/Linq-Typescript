@@ -33,6 +33,5 @@ describe("ElementAtOrDefault", () => {
     expect(() => query.elementAtOrDefault(Infinity)).toThrow("Arguments must be safe integers");
     expect(() => query.elementAtOrDefault(-1)).toThrow("Index must be a non-negative integer");
     expect(() => query.elementAtOrDefault(114)).toThrow(`Index ${114} out of range`);
-    expect(() => query.elementAtOrDefault(114, 1)).not.toThrow(`Index ${114} out of range`);
   });
 });

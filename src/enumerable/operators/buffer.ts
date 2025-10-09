@@ -1,3 +1,4 @@
+import { CHUNK_SIZE_NON_NEGATIVE_INTEGER, NOT_SAFE_INTEGER } from "../../utils/constants";
 import { Enumerable } from "../enumerable";
 
 export function buffer<TValue>(
@@ -5,11 +6,11 @@ export function buffer<TValue>(
   chunkSize: number
 ): Enumerable<TValue[]> {
   if (!Number.isSafeInteger(chunkSize)) {
-    throw new RangeError("Arguments must be safe integers");
+    throw new RangeError(NOT_SAFE_INTEGER);
   }
 
   if(chunkSize <= 0) {
-    throw new RangeError("Chunk size must be a non-negative integer");
+    throw new RangeError(CHUNK_SIZE_NON_NEGATIVE_INTEGER);
   }
 
   function* generator(): Generator<TValue[]> {

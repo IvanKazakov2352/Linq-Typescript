@@ -1,3 +1,4 @@
+import { NOT_SAFE_INTEGER } from "../../utils/constants";
 import { Enumerable } from "../enumerable";
 
 export function take<TValue>(
@@ -5,7 +6,7 @@ export function take<TValue>(
   count: number
 ): Enumerable<TValue> {
   if (!Number.isSafeInteger(count)) {
-    throw new RangeError("Arguments must be safe integers");
+    throw new RangeError(NOT_SAFE_INTEGER);
   }
 
   function* generator(): Generator<TValue> {

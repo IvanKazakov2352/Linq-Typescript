@@ -1,3 +1,4 @@
+import { IS_NOT_A_FUNCTION } from "../../utils/constants";
 import { isFunction } from "../../utils/utils";
 import { Enumerable } from "../enumerable";
 
@@ -6,7 +7,7 @@ export function select<TValue, TResult>(
   callback: (value: TValue, index: number) => TResult
 ): Enumerable<TResult> {
   if (!isFunction(callback)) {
-    throw new TypeError("Callback must be a function");
+    throw new TypeError(IS_NOT_A_FUNCTION);
   }
   
   function* generator(): Generator<TResult> {

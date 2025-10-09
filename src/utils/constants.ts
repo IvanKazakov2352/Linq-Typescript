@@ -1,2 +1,10 @@
 export const INT32_MIN: number = -2147483648;
 export const INT32_MAX: number = 2147483647;
+export const NOT_ITERATOR_TEXT: string = "The iterator object cannot be empty";
+export const DISPOSED_OBJECT: string = "Cannot iterate over a disposed object";
+export const COMPLETED_SEQUENCE: string = "Cannot iterate over an already completed sequence";
+export const IS_NOT_A_FUNCTION: string = "Callback must be a function";
+export const CHUNK_SIZE_NON_NEGATIVE_INTEGER: string = "Chunk size must be a non-negative integer";
+export const NOT_SAFE_INTEGER: string = "Arguments must be safe integers";
+export const INDEX_NON_NEGATIVE_INTEGER: string = "Index must be a non-negative integer";
+export const SEQUENCE_CONTAINS_NO_ELEMENTS: string = "Sequence contains no elements";

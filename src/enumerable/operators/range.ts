@@ -1,4 +1,4 @@
-import { INT32_MAX, INT32_MIN } from "../../utils/constants";
+import { INT32_MAX, INT32_MIN, NOT_SAFE_INTEGER } from "../../utils/constants";
 import { Enumerable } from "../enumerable";
 
 export function range(
@@ -6,7 +6,7 @@ export function range(
   count: number
 ): Enumerable<number> {
   if (!Number.isSafeInteger(start) || !Number.isSafeInteger(count)) {
-    throw new RangeError("Arguments must be safe integers");
+    throw new RangeError(NOT_SAFE_INTEGER);
   }
 
   if (count < 0) {

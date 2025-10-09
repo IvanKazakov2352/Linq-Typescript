@@ -9,6 +9,20 @@ describe("Any", () => {
     const query = new Enumerable([])
     expect(query.any()).toBe(false);
   });
+  it("Any on empty Set", () => {
+    const query = new Enumerable(new Set())
+    expect(query.any()).toBe(false);
+  });
+  it("Any on empty Map and Uint8Array", () => {
+    const query = new Enumerable(new Map([]))
+    const query2 = new Enumerable(new Uint8Array())
+    expect(query.any()).toBe(false);
+    expect(query2.any()).toBe(false);
+  });
+  it("Any on Set value", () => {
+    const query = new Enumerable(new Set([1, 2]))
+    expect(query.any()).toBe(true);
+  });
   it("Any on one element in the array", () => {
     const query = new Enumerable([{ age: 18, name: "John" }])
     expect(query.any()).toBe(true);
@@ -26,9 +40,9 @@ describe("Any", () => {
     expect(query.any((x, index) => index === 3)).toBe(true);
   });
   it("Any stops on first match", () => {
-    let callCount = 0;
+    let count = 0;
     const predicate = (x: number) => {
-      callCount++;
+      count++;
       return x === 3;
     };
 
@@ -36,7 +50,7 @@ describe("Any", () => {
     const result = query.any(predicate);
 
     expect(result).toBe(true);
-    expect(callCount).toBe(3);
+    expect(count).toBe(3);
   });
   it("Any with object properties", () => {
     interface Person {
